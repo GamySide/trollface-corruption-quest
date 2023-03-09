@@ -20,11 +20,12 @@
             physics: {
                 default: 'arcade',
                 arcade: {
-                    gravity: { y: 300 },
-                    debug: false
+                    gravity: false,
+                    debug: true
                 }
             },
-            scene: { preload: preload, create: create, update: update }
+            scene: { preload: preload, create: create, update: update },
+            input: { gamepad: true },
         };
         new Phaser.Game(config);
         function preload() {
@@ -48,7 +49,7 @@
             platforms.create(750, 220, 'ground');
 
             player = this.physics.add.sprite(100, 450, 'perso');
-            player.setBounce(0.2);
+            player.setBounce(0);
             player.setCollideWorldBounds(true);
             this.physics.add.collider(player, platforms);
             this.anims.create({
@@ -71,7 +72,15 @@
 
             cursors = this.input.keyboard.createCursorKeys();
         }
+
         function update() {
+            //this.input.gamepad.once('connected', function (pad) { });
+
+            //up = cursor.up.isdown//||leftStick.Vector2.y >= 1
+            //down = cursor.down.isdown//||leftStick.Vector2.y >= -1
+            //left = cursor.left.isdown//||leftStick.Vector2.x >= -1
+            //right = cursor.right.isdown//||leftStick.Vector2.x >= 1
+
             if (cursors.left.isDown) { //si la touche gauche est appuyée
                 player.setVelocityX(-160); //alors vitesse négative en X
                 player.anims.play('left', true); //et animation => gauche
@@ -80,14 +89,20 @@
                 player.setVelocityX(160); //alors vitesse positive en X
                 player.anims.play('right', true); //et animation => droite
             }
-            else { // sinon
-                player.setVelocityX(0); //vitesse nulle
-                player.anims.play('turn'); //animation fait face caméra
+            else if (cursors.up.isDown) { //sinon si la touche droite est appuyée
+                player.setVelocityY(-160); //alors vitesse positive en X
+                player.anims.play('right', true); //et animation => droite
             }
-            if (cursors.up.isDown && player.body.touching.down) {
-                //si touche haut appuyée ET que le perso touche le sol
-                player.setVelocityY(-330); //alors vitesse verticale négative
-                //(on saute)
+            else if (cursors.down.isDown) { //sinon si la touche droite est appuyée
+                player.setVelocityY(160); //alors vitesse positive en X
+                player.anims.play('right', true); //et animation => droite
+            }
+            else { // sinon
+                //player.setVelocityX(Phaser.Math.Between(-50, 50)); //vitesse nulle
+                //player.setVelocityY(Phaser.Math.Between(-50, 50)); //vitesse nulle
+                player.anims.play('turn'); //animation fait face caméra
+                player.setVelocityX(0);
+                player.setVelocityY(0);
             }
         }
     </script>
