@@ -17,6 +17,9 @@
         var config = {
             type: Phaser.AUTO,
             width: 800, height: 600,
+            input: {
+                gamepad: true
+            },
             physics: {
                 default: 'arcade',
                 arcade: {
@@ -73,7 +76,25 @@
             cursors = this.input.keyboard.createCursorKeys();
         }
 
+
+
         function update() {
+            if (this.input.gamepad.total === 0) {
+                return;
+            }
+
+            var pad = this.input.gamepad.getPad(0);
+
+            if (pad.axes.length) {
+                var axisH = pad.axes[0].getValue();
+                var axisV = pad.axes[1].getValue();
+
+                player.x += 4 * axisH;
+                player.y += 4 * axisV;
+
+                player.flipX = (axisH > 0);
+            }
+
             //this.input.gamepad.once('connected', function (pad) { });
 
             //up = cursor.up.isdown//||leftStick.Vector2.y >= 1
@@ -89,22 +110,25 @@
                 player.setVelocityX(160); //alors vitesse positive en X
                 player.anims.play('right', true); //et animation => droite
             }
-            else if (cursors.up.isDown) { //sinon si la touche droite est appuyée
-                player.setVelocityY(-160); //alors vitesse positive en X
-                player.anims.play('right', true); //et animation => droite
+            else { //sinon si la touche droite est appuyée
+                player.anims.play('turn'); //animation fait face caméra
+                player.setVelocityX(0);
+            }
+
+            if (cursors.up.isDown) { //si la touche gauche est appuyée
+                player.setVelocityY(-160); //alors vitesse négative en X
+                player.anims.play('left', true); //et animation => gauche
             }
             else if (cursors.down.isDown) { //sinon si la touche droite est appuyée
                 player.setVelocityY(160); //alors vitesse positive en X
                 player.anims.play('right', true); //et animation => droite
             }
-            else { // sinon
-                //player.setVelocityX(Phaser.Math.Between(-50, 50)); //vitesse nulle
-                //player.setVelocityY(Phaser.Math.Between(-50, 50)); //vitesse nulle
+            else { //sinon si la touche droite est appuyée
                 player.anims.play('turn'); //animation fait face caméra
-                player.setVelocityX(0);
                 player.setVelocityY(0);
             }
         }
+
     </script>
 </body>
 
