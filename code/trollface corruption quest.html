@@ -74,54 +74,57 @@
             });
 
             cursors = this.input.keyboard.createCursorKeys();
+            pad={
+            leftStick : {x:0,y:0},
+            rightStick : {x:0,y:0},
+            A : false,
+            B : false,
+            X :false,
+            Y : false,
+            L1 : 0,
+            L2 : 0,
+            R1 : 0,
+            R2 : 0,
+            right : false,
+            left : false,
+            up :false,
+            down : false,
+            }
         }
 
 
 
         function update() {
-            if (this.input.gamepad.total === 0) {
-                return;
-            }
-
-            var pad = this.input.gamepad.getPad(0);
-
-            if (pad.axes.length) {
-                var axisH = pad.axes[0].getValue();
-                var axisV = pad.axes[1].getValue();
-
-                player.x += 4 * axisH;
-                player.y += 4 * axisV;
-
-                player.flipX = (axisH > 0);
-            }
-
-            //this.input.gamepad.once('connected', function (pad) { });
-
-            //up = cursor.up.isdown//||leftStick.Vector2.y >= 1
-            //down = cursor.down.isdown//||leftStick.Vector2.y >= -1
-            //left = cursor.left.isdown//||leftStick.Vector2.x >= -1
-            //right = cursor.right.isdown//||leftStick.Vector2.x >= 1
-
-            if (cursors.left.isDown) { //si la touche gauche est appuyée
+            this.input.gamepad.once('connected', function (mypad) {
+                // 'pad' is a reference to the gamepad that was just connected
+                pad=mypad;
+                console.log(pad);
+            });
+            
+            if (cursors.left.isDown || pad.leftStick.x <= -0.5 || pad.left == true) { //si la touche gauche est appuyée
                 player.setVelocityX(-160); //alors vitesse négative en X
                 player.anims.play('left', true); //et animation => gauche
+                player.setVelocityY(0)
             }
-            else if (cursors.right.isDown) { //sinon si la touche droite est appuyée
+            else if (cursors.right.isDown || pad.leftStick.x >= 0.5) { //sinon si la touche droite est appuyée
                 player.setVelocityX(160); //alors vitesse positive en X
                 player.anims.play('right', true); //et animation => droite
+                player.setVelocityY(0)
             }
             else { //sinon si la touche droite est appuyée
                 player.anims.play('turn'); //animation fait face caméra
                 player.setVelocityX(0);
             }
 
-            if (cursors.up.isDown) { //si la touche gauche est appuyée
+            if (cursors.up.isDown || pad.leftStick.y <= -0.5) { //si la touche gauche est appuyée
                 player.setVelocityY(-160); //alors vitesse négative en X
                 player.anims.play('left', true); //et animation => gauche
+                player.setVelocityX(0);
             }
-            else if (cursors.down.isDown) { //sinon si la touche droite est appuyée
+            else if (cursors.down.isDown || pad.leftStick.y >= 0.5) { //sinon si la touche droite est appuyée
                 player.setVelocityY(160); //alors vitesse positive en X
                 player.anims.play('right', true); //et animation => droite
+                player.setVelocityX(0);
             }
             else { //sinon si la touche droite est appuyée
                 player.anims.play('turn'); //animation fait face caméra
