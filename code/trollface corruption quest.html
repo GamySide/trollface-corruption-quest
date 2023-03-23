@@ -16,7 +16,7 @@
     <script type="text/javascript">
         var config = {
             type: Phaser.AUTO,
-            width: 800, height: 600,
+            width: 1000, height: 1000,
             input: {
                 gamepad: true
             },
@@ -32,10 +32,8 @@
         };
         new Phaser.Game(config);
         function preload() {
-            this.load.image('sky', '../assets/sky.png');
-            this.load.image('ground', '../assets/platform.png');
-            this.load.image('star', '../assets/star.png');
-            this.load.image('bomb', '../assets/bomb.png');
+            this.load.image("placeholder1", "../assets/map_ville/placeholder1.png");
+            this.load.tilemapTiledJSON("carte", "../assets/map_ville/mapVille.json");
             this.load.spritesheet('perso', '../assets/perso.png',
                 { frameWidth: 32, frameHeight: 48 });
         }
@@ -44,14 +42,39 @@
         var player;
 
         function create() {
-            this.add.image(400, 300, 'sky');
-            platforms = this.physics.add.staticGroup();
-            platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-            platforms.create(600, 400, 'ground');
-            platforms.create(50, 250, 'ground');
-            platforms.create(750, 220, 'ground');
+            const carteDuNiveau = this.add.tilemap("carte");
+            const tileset = carteDuNiveau.addTilesetImage("placeholder1", "placeholder1");
 
-            player = this.physics.add.sprite(100, 450, 'perso');
+            const corruption_lake = carteDuNiveau.createLayer(
+                "corruption_lake",
+                tileset
+            );
+            const parterre = carteDuNiveau.createLayer(
+                "parterre",
+                tileset
+            );
+            const chemin = carteDuNiveau.createLayer(
+                "chemin",
+                tileset
+            );
+            const maison_pp = carteDuNiveau.createLayer(
+                "maison_pp",
+                tileset
+            );
+            const maison_piege = carteDuNiveau.createLayer(
+                "maison_piege",
+                tileset
+            );
+            const maison_pnj = carteDuNiveau.createLayer(
+                "maison_pnj",
+                tileset
+            );
+            const arbre = carteDuNiveau.createLayer(
+                "arbre",
+                tileset
+            );
+
+            player = this.physics.add.sprite(0, 0, 'perso');
             player.setBounce(0);
             player.setCollideWorldBounds(true);
             this.physics.add.collider(player, platforms);
@@ -74,22 +97,26 @@
             });
 
             cursors = this.input.keyboard.createCursorKeys();
-            pad={
-            leftStick : {x:0,y:0},
-            rightStick : {x:0,y:0},
-            A : false,
-            B : false,
-            X :false,
-            Y : false,
-            L1 : 0,
-            L2 : 0,
-            R1 : 0,
-            R2 : 0,
-            right : false,
-            left : false,
-            up :false,
-            down : false,
+            pad = {
+                leftStick: { x: 0, y: 0 },
+                rightStick: { x: 0, y: 0 },
+                A: false,
+                B: false,
+                X: false,
+                Y: false,
+                L1: 0,
+                L2: 0,
+                R1: 0,
+                R2: 0,
+                right: false,
+                left: false,
+                up: false,
+                down: false,
             }
+            this.physics.world.setBounds(-32*32, -32*32, 64*32, 48*32);
+                    //  ajout du champs de la caméra de taille identique à celle du monde
+                    this.cameras.main.setBounds(-32*32, -32*32, 64*32, 48*32);
+                    this.cameras.main.startFollow(player);
         }
 
 
@@ -97,10 +124,10 @@
         function update() {
             this.input.gamepad.once('connected', function (mypad) {
                 // 'pad' is a reference to the gamepad that was just connected
-                pad=mypad;
+                pad = mypad;
                 console.log(pad);
             });
-            
+
             if (cursors.left.isDown || pad.leftStick.x <= -0.5 || pad.left == true) { //si la touche gauche est appuyée
                 player.setVelocityX(-160); //alors vitesse négative en X
                 player.anims.play('left', true); //et animation => gauche
