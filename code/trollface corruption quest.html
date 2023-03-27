@@ -144,54 +144,30 @@
             if (cursors.left.isDown || pad.leftStick.x <= -0.5 || pad.left == true) { //si la touche gauche est appuyée
                 player.setVelocityX(-160); //alors vitesse négative en X
                 player.anims.play('left', true); //et animation => gauche
-                player.anims.play('right', false); //et animation => gauche
-                player.anims.play('turn', false); //et animation => gauche
-                player.anims.play('up', false); //et animation => gauche
-                player.anims.play('down', false); //et animation => gauche
                 player.setVelocityY(0)
             }
             else if (cursors.right.isDown || pad.leftStick.x >= 0.5) { //sinon si la touche droite est appuyée
                 player.setVelocityX(160); //alors vitesse positive en X
-                player.anims.play('left', false); //et animation => gauche
                 player.anims.play('right', true); //et animation => gauche
-                player.anims.play('turn', false); //et animation => gauche
-                player.anims.play('up', false); //et animation => gauche
-                player.anims.play('down', false); //et animation => gauche
                 player.setVelocityY(0)
             }
             else { //sinon si la touche droite est appuyée
-                player.anims.play('left', false); //et animation => gauche
-                player.anims.play('right', false); //et animation => gauche
                 player.anims.play('turn', true); //et animation => gauche
-                player.anims.play('up', false); //et animation => gauche
-                player.anims.play('down', false); //et animation => gauche
                 player.setVelocityX(0);
             }
 
             if (cursors.up.isDown || pad.leftStick.y <= -0.5) { //si la touche gauche est appuyée
                 player.setVelocityY(-160); //alors vitesse négative en X
-                player.anims.play('left', false); //et animation => gauche
-                player.anims.play('right', false); //et animation => gauche
-                player.anims.play('turn', false); //et animation => gauche
                 player.anims.play('up', true); //et animation => gauche
-                player.anims.play('down', false); //et animation => gauche
                 player.setVelocityX(0);
             }
             else if (cursors.down.isDown || pad.leftStick.y >= 0.5) { //sinon si la touche droite est appuyée
                 player.setVelocityY(160); //alors vitesse positive en X
-                player.anims.play('left', false); //et animation => gauche
-                player.anims.play('right', false); //et animation => gauche
-                player.anims.play('turn', false); //et animation => gauche
-                player.anims.play('up', false); //et animation => gauche
                 player.anims.play('down', true); //et animation => gauche
                 player.setVelocityX(0);
             }
             else { //sinon si la touche droite est appuyée
-                player.anims.play('left', false); //et animation => gauche
-                player.anims.play('right', false); //et animation => gauche
                 player.anims.play('turn', true); //et animation => gauche
-                player.anims.play('up', false); //et animation => gauche
-                player.anims.play('down', false); //et animation => gauche
                 player.setVelocityY(0);
             }
         }
