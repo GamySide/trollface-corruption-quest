@@ -40,6 +40,9 @@
 
         var platforms;
         var player;
+        var turn = false;
+        var bomb = false;
+        var telecommande = false;
 
         function create() {
             const carteDuNiveau = this.add.tilemap("carte");
@@ -108,7 +111,19 @@
                 frameRate: 6,
                 repeat: -1
             });
-
+            this.anims.create({
+                key: 'bomb',
+                frames: this.anims.generateFrameNumbers('perso', { start: 34, end: 39 }),
+                frameRate: 6,
+                repeat: 0
+            });
+            this.anims.create({
+                key: 'switch',
+                frames: this.anims.generateFrameNumbers('perso', { start: 28, end: 33 }),
+                frameRate: 6,
+                repeat: 0
+            });
+            clavier = this.input.keyboard.addKeys('A,Z,E,R');
             cursors = this.input.keyboard.createCursorKeys();
             pad = {
                 leftStick: { x: 0, y: 0 },
@@ -132,8 +147,6 @@
                     this.cameras.main.startFollow(player);
         }
 
-
-
         function update() {
             this.input.gamepad.once('connected', function (mypad) {
                 // 'pad' is a reference to the gamepad that was just connected
@@ -141,35 +154,63 @@
                 console.log(pad);
             });
 
-            if (cursors.left.isDown || pad.leftStick.x <= -0.5 || pad.left == true) { //si la touche gauche est appuyée
+            if (cursors.left.isDown || pad.leftStick.x <= -0.5 || pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
                 player.setVelocityX(-160); //alors vitesse négative en X
                 player.anims.play('left', true); //et animation => gauche
                 player.setVelocityY(0)
             }
-            else if (cursors.right.isDown || pad.leftStick.x >= 0.5) { //sinon si la touche droite est appuyée
+            else if (cursors.right.isDown || pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
                 player.setVelocityX(160); //alors vitesse positive en X
                 player.anims.play('right', true); //et animation => gauche
                 player.setVelocityY(0)
             }
             else { //sinon si la touche droite est appuyée
-                player.anims.play('turn', true); //et animation => gauche
+                //player.anims.play('turn', true); //et animation => gauche
                 player.setVelocityX(0);
+                turn = true;
             }
 
-            if (cursors.up.isDown || pad.leftStick.y <= -0.5) { //si la touche gauche est appuyée
+            if (cursors.up.isDown || pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
                 player.setVelocityY(-160); //alors vitesse négative en X
                 player.anims.play('up', true); //et animation => gauche
                 player.setVelocityX(0);
             }
-            else if (cursors.down.isDown || pad.leftStick.y >= 0.5) { //sinon si la touche droite est appuyée
+            else if (cursors.down.isDown || pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
                 player.setVelocityY(160); //alors vitesse positive en X
                 player.anims.play('down', true); //et animation => gauche
                 player.setVelocityX(0);
             }
-            else { //sinon si la touche droite est appuyée
+            else{ //sinon si la touche droite est appuyée
                 //player.anims.play('turn', true); //et animation => gauche
                 player.setVelocityY(0);
+                if (turn == true && bomb == false && telecommande == false){
+                    player.anims.play('turn', true); //et animation => gauche
+                }
             }
+            turn = false;
+            
+            if (clavier.A.isDown && bomb == false && telecommande == false){
+                console.log('patate')
+                turn = false;
+                bomb = true;
+                player.anims.play('bomb', true); //et animation => gauche
+                setTimeout(() => {
+                    bomb = false;
+                },1000)
+            
+            }
+
+            if (clavier.Z.isDown && telecommande == false && bomb == false){
+                console.log('patate')
+                turn = false;
+                telecommande = true;
+                player.anims.play('switch', true); //et animation => gauche
+                setTimeout(() => {
+                    telecommande = false;
+                },1000)
+            
+            }
+            
         }
 
     </script>
