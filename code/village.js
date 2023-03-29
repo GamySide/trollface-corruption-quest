@@ -1,57 +1,110 @@
-var platforms;
-var player;
+var posX;
+var posY;
 var turn = false;
 var bomb = false;
 var telecommande = false;
+touchDoorPP = false;
+touchDoorPNJ = false;
+touchDoorPiege = false;
 
 class village extends Phaser.Scene {
     constructor() {
         super('village');
     }
+    init(data){
+        this.posX = data.x;
+        this.posY = data.y
+    }
     preload() {
         this.load.image("placeholder1", "../assets/map_ville/placeholder1.png");
-        this.load.tilemapTiledJSON("carte", "../assets/map_ville/mapVille.json");
-        this.load.spritesheet('perso', '../assets/perso.png',
+        this.load.tilemapTiledJSON("village", "../assets/map_ville/mapVille.json");
+        this.load.spritesheet('village', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
     }
 
     create() {
-        const carteDuNiveau = this.add.tilemap("carte");
-        const tileset = carteDuNiveau.addTilesetImage("placeholder1", "placeholder1");
+        const carteVillage = this.add.tilemap("village");
+        const tileset = carteVillage.addTilesetImage("placeholder1", "placeholder1");
 
-        const corruption_lake = carteDuNiveau.createLayer(
+        const corruption_lake = carteVillage.createLayer(
             "corruption_lake",
             tileset
         );
-        const parterre = carteDuNiveau.createLayer(
+        const parterre = carteVillage.createLayer(
             "parterre",
             tileset
         );
-        const chemin = carteDuNiveau.createLayer(
+        const enterPP = carteVillage.createLayer(
+            "enterPP",
+            tileset
+        );
+        const enterPiege = carteVillage.createLayer(
+            "enterPiege",
+            tileset
+        );
+        const enterPNJ = carteVillage.createLayer(
+            "enterPNJ",
+            tileset
+        );
+        const chemin = carteVillage.createLayer(
             "chemin",
             tileset
         );
-        const maison_pp = carteDuNiveau.createLayer(
+        const maison_pp = carteVillage.createLayer(
             "maison_pp",
             tileset
         );
-        const maison_piege = carteDuNiveau.createLayer(
+        const maison_piege = carteVillage.createLayer(
             "maison_piege",
             tileset
         );
-        const maison_pnj = carteDuNiveau.createLayer(
+        const maison_pnj = carteVillage.createLayer(
             "maison_pnj",
             tileset
         );
-        const arbre = carteDuNiveau.createLayer(
+        const arbre = carteVillage.createLayer(
             "arbre",
             tileset
         );
+        //this.scene.events.on('pos', function(data){
+            //this.player = this.physics.add.sprite(data.x ,data.y, 'perso');
+        //});
+        //let player = this.scene.getData('player');
+        //init(data);{
+            //this.posX = data.x; 
+            //this.posY = data.y;
+        //}
 
-        player = this.physics.add.sprite(0, 0, 'perso');
-        player.setBounce(0);
-        player.setCollideWorldBounds(true);
-        this.physics.add.collider(player, platforms);
+        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+        this.player.setBounce(0);
+        this.player.setCollideWorldBounds(true);
+        this.physics.add.collider(this.player);
+        arbre.setCollisionByExclusion(-1, true);
+        maison_pp.setCollisionByExclusion(-1, true);
+        maison_piege.setCollisionByExclusion(-1, true);
+        maison_pnj.setCollisionByExclusion(-1, true);
+        arbre.setCollisionByExclusion(-1, true);
+        enterPP.setCollisionByExclusion(-1, true);
+        enterPiege.setCollisionByExclusion(-1, true);
+        enterPNJ.setCollisionByExclusion(-1, true);
+        
+        this.physics.add.collider(this.player, arbre);
+        this.physics.add.collider(this.player, maison_pp);
+        this.physics.add.collider(this.player, maison_piege);
+        this.physics.add.collider(this.player, maison_pnj);
+        this.physics.add.collider(this.player, enterPP, portePP);
+        this.physics.add.collider(this.player, enterPiege, portePiege);
+        this.physics.add.collider(this.player, enterPNJ, portePNJ);
+        
+        function portePP(){
+            touchDoorPP = true
+        }
+        function portePiege(){
+            touchDoorPiege = true
+        }
+        function portePNJ(){
+            touchDoorPNJ = true
+        }
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('perso', { start: 11, end: 15 }),
@@ -115,7 +168,7 @@ class village extends Phaser.Scene {
         this.physics.world.setBounds(-32 * 32, -32 * 32, 64 * 32, 48 * 32);
         //  ajout du champs de la caméra de taille identique à celle du monde
         this.cameras.main.setBounds(-32 * 32, -32 * 32, 64 * 32, 48 * 32);
-        this.cameras.main.startFollow(player);
+        this.cameras.main.startFollow(this.player);
     }
 
     update() {
@@ -126,36 +179,36 @@ class village extends Phaser.Scene {
         });
 
         if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
-            player.setVelocityX(-160); //alors vitesse négative en X
-            player.anims.play('left', true); //et animation => gauche
-            player.setVelocityY(0)
+            this.player.setVelocityX(-160); //alors vitesse négative en X
+            this.player.anims.play('left', true); //et animation => gauche
+            this.player.setVelocityY(0)
         }
         else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
-            player.setVelocityX(160); //alors vitesse positive en X
-            player.anims.play('right', true); //et animation => gauche
-            player.setVelocityY(0)
+            this.player.setVelocityX(160); //alors vitesse positive en X
+            this.player.anims.play('right', true); //et animation => gauche
+            this.player.setVelocityY(0)
         }
         else { //sinon si la touche droite est appuyée
             //player.anims.play('turn', true); //et animation => gauche
-            player.setVelocityX(0);
+            this.player.setVelocityX(0);
             turn = true;
         }
 
         if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
-            player.setVelocityY(-160); //alors vitesse négative en X
-            player.anims.play('up', true); //et animation => gauche
-            player.setVelocityX(0);
+            this.player.setVelocityY(-160); //alors vitesse négative en X
+            this.player.anims.play('up', true); //et animation => gauche
+            this.player.setVelocityX(0);
         }
         else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
-            player.setVelocityY(160); //alors vitesse positive en X
-            player.anims.play('down', true); //et animation => gauche
-            player.setVelocityX(0);
+            this.player.setVelocityY(160); //alors vitesse positive en X
+            this.player.anims.play('down', true); //et animation => gauche
+            this.player.setVelocityX(0);
         }
         else { //sinon si la touche droite est appuyée
             //player.anims.play('turn', true); //et animation => gauche
-            player.setVelocityY(0);
+            this.player.setVelocityY(0);
             if (turn == true && bomb == false && telecommande == false) {
-                player.anims.play('turn', true); //et animation => gauche
+                this.player.anims.play('turn', true); //et animation => gauche
             }
         }
         turn = false;
@@ -164,7 +217,7 @@ class village extends Phaser.Scene {
             console.log('patate')
             turn = false;
             bomb = true;
-            player.anims.play('bomb', true); //et animation => gauche
+            this.player.anims.play('bomb', true); //et animation => gauche
             setTimeout(() => {
                 bomb = false;
             }, 1000)
@@ -175,11 +228,32 @@ class village extends Phaser.Scene {
             console.log('patate')
             turn = false;
             telecommande = true;
-            player.anims.play('switch', true); //et animation => gauche
+            this.player.anims.play('switch', true); //et animation => gauche
             setTimeout(() => {
                 telecommande = false;
             }, 1000)
 
+        }
+        if (touchDoorPP == true){
+            this.scene.start('maisonPP',{
+                x : 6*32,
+                y : 8*32,
+            });
+            touchDoorPP = false;
+            //let player = {x:48, y:32};
+            //this.scene.setData('player',player);
+            //this.scene.events.emit('pos',{x: 48, y: 32});
+            
+        }
+        if (touchDoorPiege == true){
+            this.scene.start('maisonPiege',{
+                x : 6*32,
+                y : 8*32,
+            });
+            touchDoorPiege = false;
+            //let player = {x:48, y:32};
+            //this.scene.setData('player',player);
+            //this.scene.events.emit('pos',{x: 48, y: 32});
         }
 
     }

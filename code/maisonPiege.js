@@ -5,9 +5,9 @@ var turn = false;
 var bomb = false;
 var telecommande = false;
 
-class MaisonPP extends Phaser.Scene {
+class MaisonPiege extends Phaser.Scene {
     constructor() {
-        super('maisonPP');
+        super('maisonPiege');
     }
     init(data){
         this.posX = data.x;
@@ -15,42 +15,42 @@ class MaisonPP extends Phaser.Scene {
     }
     preload() {
         this.load.image("placeholderMaison", "../assets/map_ville/placeholderMaison.png");
-        this.load.tilemapTiledJSON("maisonPP", "../assets/map_ville/mapMaisonPP.json");
+        this.load.tilemapTiledJSON("maisonPiege", "../assets/map_ville/mapMaisonPiege.json");
         this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
     }
 
     create() {
-        const cartemaisonPP = this.add.tilemap("maisonPP");
-        const tileset = cartemaisonPP.addTilesetImage("placeholderMaison", "placeholderMaison");
+        const cartemaisonPiege = this.add.tilemap("maisonPiege");
+        const tileset = cartemaisonPiege.addTilesetImage("placeholderMaison", "placeholderMaison");
 
-        const sol = cartemaisonPP.createLayer(
+        const sol = cartemaisonPiege.createLayer(
             "sol",
             tileset
         );
-        const wall = cartemaisonPP.createLayer(
+        const wall = cartemaisonPiege.createLayer(
             "mur invisible",
             tileset
         );
-        const sortie = cartemaisonPP.createLayer(
+        const sortie = cartemaisonPiege.createLayer(
             "sortie",
             tileset
         );
-        const tapis = cartemaisonPP.createLayer(
+        const tapis = cartemaisonPiege.createLayer(
             "tapis",
             tileset
         );
-        const props = cartemaisonPP.createLayer(
+        const props = cartemaisonPiege.createLayer(
             "props",
             tileset
         );
-        const mur = cartemaisonPP.createLayer(
+        const mur = cartemaisonPiege.createLayer(
             "mur",
             tileset
         );
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
 
-        const murdevant = cartemaisonPP.createLayer(
+        const murdevant = cartemaisonPiege.createLayer(
             "murdevant",
             tileset
         );
@@ -198,7 +198,7 @@ class MaisonPP extends Phaser.Scene {
         }
         if (touchDoor == true){
             this.scene.start('village',{
-                x : 32,
+                x : 352,
                 y : 64,
             });
             touchDoor = false;
