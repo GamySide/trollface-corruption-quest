@@ -257,7 +257,7 @@ class village extends Phaser.Scene {
         }
         if (touchDoorPNJ == true){
             this.scene.start('maisonPNJ',{
-                x : 6*32,
+                x : 8*32,
                 y : 8*32,
             });
             touchDoorPNJ = false;
