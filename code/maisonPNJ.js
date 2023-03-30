@@ -1,16 +1,13 @@
 var posX;
 var posY;
-var spawnX;
-var spawnY;
 var touchDoor = false;
 var turn = false;
 var bomb = false;
 var telecommande = false;
-var ilEstSorti = false;
 
-class MaisonPP extends Phaser.Scene {
+class MaisonPNJ extends Phaser.Scene {
     constructor() {
-        super('maisonPP');
+        super('maisonPNJ');
     }
     init(data){
         this.posX = data.x;
@@ -18,50 +15,42 @@ class MaisonPP extends Phaser.Scene {
     }
     preload() {
         this.load.image("placeholderMaison", "../assets/map_ville/placeholderMaison.png");
-        this.load.tilemapTiledJSON("maisonPP", "../assets/map_ville/mapMaisonPP.json");
+        this.load.tilemapTiledJSON("maisonPNJ", "../assets/map_ville/mapMaisonPNJ.json");
         this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
     }
 
     create() {
-        const cartemaisonPP = this.add.tilemap("maisonPP");
-        const tileset = cartemaisonPP.addTilesetImage("placeholderMaison", "placeholderMaison");
+        const cartemaisonPNJ= this.add.tilemap("maisonPNJ");
+        const tileset = cartemaisonPNJ.addTilesetImage("placeholderMaison", "placeholderMaison");
 
-        const sol = cartemaisonPP.createLayer(
+        const sol = cartemaisonPNJ.createLayer(
             "sol",
             tileset
         );
-        const wall = cartemaisonPP.createLayer(
+        const wall = cartemaisonPNJ.createLayer(
             "mur invisible",
             tileset
         );
-        const sortie = cartemaisonPP.createLayer(
+        const sortie = cartemaisonPNJ.createLayer(
             "sortie",
             tileset
         );
-        const tapis = cartemaisonPP.createLayer(
+        const tapis = cartemaisonPNJ.createLayer(
             "tapis",
             tileset
         );
-        const props = cartemaisonPP.createLayer(
+        const props = cartemaisonPNJ.createLayer(
             "props",
             tileset
         );
-        const mur = cartemaisonPP.createLayer(
+        const mur = cartemaisonPNJ.createLayer(
             "mur",
             tileset
         );
-        if (ilEstSorti == true){
-            spawnX = this.posX;
-            spawnY = this.posY;
-        }
-        else{
-            spawnX = 13*16;
-            spawnY = 4*32;
-        }
-        this.player = this.physics.add.sprite(spawnX, spawnY, 'perso');
+        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
 
-        const murdevant = cartemaisonPP.createLayer(
+        const murdevant = cartemaisonPNJ.createLayer(
             "murdevant",
             tileset
         );
@@ -152,12 +141,12 @@ class MaisonPP extends Phaser.Scene {
         });
 
         if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
-            this.player.setVelocityX(-200); //alors vitesse négative en X
+            this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
             this.player.setVelocityY(0)
         }
         else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
-            this.player.setVelocityX(200); //alors vitesse positive en X
+            this.player.setVelocityX(160); //alors vitesse positive en X
             this.player.anims.play('right', true); //et animation => gauche
             this.player.setVelocityY(0)
         }
@@ -168,12 +157,12 @@ class MaisonPP extends Phaser.Scene {
         }
 
         if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
-            this.player.setVelocityY(-200); //alors vitesse négative en X
+            this.player.setVelocityY(-160); //alors vitesse négative en X
             this.player.anims.play('up', true); //et animation => gauche
             this.player.setVelocityX(0);
         }
         else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
-            this.player.setVelocityY(200); //alors vitesse positive en X
+            this.player.setVelocityY(160); //alors vitesse positive en X
             this.player.anims.play('down', true); //et animation => gauche
             this.player.setVelocityX(0);
         }
@@ -209,11 +198,10 @@ class MaisonPP extends Phaser.Scene {
         }
         if (touchDoor == true){
             this.scene.start('village',{
-                x : 32,
-                y : 32,
+                x : 352,
+                y : -17*32,
             });
             touchDoor = false;
-            ilEstSorti = true;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});

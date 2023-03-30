@@ -255,6 +255,16 @@ class village extends Phaser.Scene {
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
+        if (touchDoorPNJ == true){
+            this.scene.start('maisonPNJ',{
+                x : 6*32,
+                y : 8*32,
+            });
+            touchDoorPNJ = false;
+            //let player = {x:48, y:32};
+            //this.scene.setData('player',player);
+            //this.scene.events.emit('pos',{x: 48, y: 32});
+        }
 
     }
 }

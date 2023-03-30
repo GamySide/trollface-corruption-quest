@@ -199,7 +199,7 @@ class MaisonPiege extends Phaser.Scene {
         if (touchDoor == true){
             this.scene.start('village',{
                 x : 352,
-                y : 64,
+                y : 32,
             });
             touchDoor = false;
             //let player = {x:48, y:32};
