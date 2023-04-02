@@ -34,6 +34,18 @@ class village extends Phaser.Scene {
             "parterre",
             tileset
         );
+        const enterForest = carteVillage.createLayer(
+            "enterForest",
+            tileset
+        );
+        const enterDesert = carteVillage.createLayer(
+            "enterDesert",
+            tileset
+        );
+        const enterCorruption = carteVillage.createLayer(
+            "enterCorruption",
+            tileset
+        );
         const enterPP = carteVillage.createLayer(
             "enterPP",
             tileset
@@ -87,6 +99,9 @@ class village extends Phaser.Scene {
         enterPP.setCollisionByExclusion(-1, true);
         enterPiege.setCollisionByExclusion(-1, true);
         enterPNJ.setCollisionByExclusion(-1, true);
+        enterForest.setCollisionByExclusion(-1, true);
+        enterDesert.setCollisionByExclusion(-1, true);
+        enterCorruption.setCollisionByExclusion(-1, true);
         
         this.physics.add.collider(this.player, arbre);
         this.physics.add.collider(this.player, maison_pp);
@@ -95,6 +110,9 @@ class village extends Phaser.Scene {
         this.physics.add.collider(this.player, enterPP, portePP);
         this.physics.add.collider(this.player, enterPiege, portePiege);
         this.physics.add.collider(this.player, enterPNJ, portePNJ);
+        this.physics.add.collider(this.player, enterForest, porteForest);
+        this.physics.add.collider(this.player, enterDesert, porteDesert);
+        this.physics.add.collider(this.player, enterCorruption, porteCorruption);
         
         function portePP(){
             touchDoorPP = true
@@ -103,6 +121,15 @@ class village extends Phaser.Scene {
             touchDoorPiege = true
         }
         function portePNJ(){
+            touchDoorPNJ = true
+        }
+        function porteForest(){
+            touchDoorPNJ = true
+        }
+        function porteDesert(){
+            touchDoorPNJ = true
+        }
+        function porteCorruption(){
             touchDoorPNJ = true
         }
         this.anims.create({
