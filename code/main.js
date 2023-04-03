@@ -11,7 +11,7 @@ var config = {
             debug: true
         }
     },
-    scene: [ MaisonPP,MaisonPiege,MaisonPNJ,village,],
+    scene: [MaisonPP,MaisonPiege,MaisonPNJ,village,forest],
     input: { gamepad: true },
 };
 var game = new Phaser.Game(config);

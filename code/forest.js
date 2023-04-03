@@ -1,138 +1,78 @@
 var posX;
 var posY;
+var touchDoor = false;
 var turn = false;
 var bomb = false;
 var telecommande = false;
-touchDoorPP = false;
-touchDoorPNJ = false;
-touchDoorPiege = false;
-touchDoorforest = false;
-
-class village extends Phaser.Scene {
+var touchDungeonDoor = false;
+var touchlimite = false;
+class forest extends Phaser.Scene {
     constructor() {
-        super('village');
+        super('forest');
     }
     init(data){
         this.posX = data.x;
         this.posY = data.y
     }
     preload() {
-        this.load.image("placeholder1", "../assets/map_ville/placeholder1.png");
-        this.load.tilemapTiledJSON("village", "../assets/map_ville/mapVille.json");
-        this.load.spritesheet('village', '../assets/perso.png',
+        this.load.image("placeholderforest", "../assets/map_ville/placeholderforest.png");
+        this.load.image("arbreDonjon", "../assets/map_ville/arbreDonjon.png");
+        this.load.tilemapTiledJSON("mapForet", "../assets/map_ville/mapForet.json");
+        this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
     }
 
     create() {
-        const carteVillage = this.add.tilemap("village");
-        const tileset = carteVillage.addTilesetImage("placeholder1", "placeholder1");
-
-        const corruption_lake = carteVillage.createLayer(
-            "corruption_lake",
+        const carteForest = this.add.tilemap("mapForet");
+        const tileset = carteForest.addTilesetImage("placeholderforest", "placeholderforest");
+        const giantTree = carteForest.addTilesetImage("arbreDonjon", "arbreDonjon");
+        const sol = carteForest.createLayer(
+            "sol",
             tileset
         );
-        const parterre = carteVillage.createLayer(
+        const versVille = carteForest.createLayer(
+            "versVille",
+            tileset
+        );
+        const entreeDonjon = carteForest.createLayer(
+            "entreeDonjon",
+            tileset
+        );
+        const parterre = carteForest.createLayer(
             "parterre",
             tileset
         );
-        const enterForest = carteVillage.createLayer(
-            "enterForest",
-            tileset
-        );
-        const enterDesert = carteVillage.createLayer(
-            "enterDesert",
-            tileset
-        );
-        const enterCorruption = carteVillage.createLayer(
-            "enterCorruption",
-            tileset
-        );
-        const enterPP = carteVillage.createLayer(
-            "enterPP",
-            tileset
-        );
-        const enterPiege = carteVillage.createLayer(
-            "enterPiege",
-            tileset
-        );
-        const enterPNJ = carteVillage.createLayer(
-            "enterPNJ",
-            tileset
-        );
-        const chemin = carteVillage.createLayer(
-            "chemin",
-            tileset
-        );
-        const maison_pp = carteVillage.createLayer(
-            "maison_pp",
-            tileset
-        );
-        const maison_piege = carteVillage.createLayer(
-            "maison_piege",
-            tileset
-        );
-        const maison_pnj = carteVillage.createLayer(
-            "maison_pnj",
-            tileset
-        );
-        const arbre = carteVillage.createLayer(
+        const arbre = carteForest.createLayer(
             "arbre",
             tileset
         );
-        //this.scene.events.on('pos', function(data){
-            //this.player = this.physics.add.sprite(data.x ,data.y, 'perso');
-        //});
-        //let player = this.scene.getData('player');
-        //init(data);{
-            //this.posX = data.x; 
-            //this.posY = data.y;
-        //}
-
+        const arbreDonjon = carteForest.createLayer(
+            "arbreDonjon",
+            giantTree
+        );
+        const dungeonDoor = carteForest.createLayer(
+            "dungeonDoor",
+            giantTree
+        );
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+
+        arbre.setCollisionByExclusion(-1, true);
+        entreeDonjon.setCollisionByExclusion(-1, true);
+        arbreDonjon.setCollisionByExclusion(-1, true);
+        versVille.setCollisionByExclusion(-1, true);
+        this.physics.add.collider(this.player, arbre);
+        this.physics.add.collider(this.player, arbreDonjon);
+        this.physics.add.collider(this.player, entreeDonjon, porteDonjon);
+        this.physics.add.collider(this.player, versVille, goville);
+        function porteDonjon(){
+            touchDungeonDoor = true
+        }
+        function goville(){
+            touchlimite = true
+        }
+        
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player);
-        arbre.setCollisionByExclusion(-1, true);
-        maison_pp.setCollisionByExclusion(-1, true);
-        maison_piege.setCollisionByExclusion(-1, true);
-        maison_pnj.setCollisionByExclusion(-1, true);
-        arbre.setCollisionByExclusion(-1, true);
-        enterPP.setCollisionByExclusion(-1, true);
-        enterPiege.setCollisionByExclusion(-1, true);
-        enterPNJ.setCollisionByExclusion(-1, true);
-        enterForest.setCollisionByExclusion(-1, true);
-        enterDesert.setCollisionByExclusion(-1, true);
-        enterCorruption.setCollisionByExclusion(-1, true);
-        
-        this.physics.add.collider(this.player, arbre);
-        this.physics.add.collider(this.player, maison_pp);
-        this.physics.add.collider(this.player, maison_piege);
-        this.physics.add.collider(this.player, maison_pnj);
-        this.physics.add.collider(this.player, enterPP, portePP);
-        this.physics.add.collider(this.player, enterPiege, portePiege);
-        this.physics.add.collider(this.player, enterPNJ, portePNJ);
-        this.physics.add.collider(this.player, enterForest, porteForest);
-        this.physics.add.collider(this.player, enterDesert, porteDesert);
-        this.physics.add.collider(this.player, enterCorruption, porteCorruption);
-        
-        function portePP(){
-            touchDoorPP = true
-        }
-        function portePiege(){
-            touchDoorPiege = true
-        }
-        function portePNJ(){
-            touchDoorPNJ = true
-        }
-        function porteForest(){
-            touchDoorforest = true
-        }
-        function porteDesert(){
-            touchDoorPNJ = true
-        }
-        function porteCorruption(){
-            touchDoorPNJ = true
-        }
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('perso', { start: 11, end: 15 }),
@@ -193,9 +133,9 @@ class village extends Phaser.Scene {
             up: false,
             down: false,
         }
-        this.physics.world.setBounds(-32 * 32, -32 * 32, 64 * 32, 48 * 32);
+        this.physics.world.setBounds(0, -16 * 32, 80 * 32, 80 * 32);
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(-32 * 32, -32 * 32, 64 * 32, 48 * 32);
+        this.cameras.main.setBounds(0, -16 * 32, 80 * 32, 80 * 32);
         this.cameras.main.startFollow(this.player);
     }
 
@@ -262,47 +202,25 @@ class village extends Phaser.Scene {
             }, 1000)
 
         }
-        if (touchDoorPP == true){
-            this.scene.start('maisonPP',{
-                x : 6*32,
-                y : 8*32,
+        if (touchDungeonDoor == true){
+            this.scene.start('village',{
+                x : 352,
+                y : 32,
             });
-            touchDoorPP = false;
-            //let player = {x:48, y:32};
-            //this.scene.setData('player',player);
-            //this.scene.events.emit('pos',{x: 48, y: 32});
-            
-        }
-        if (touchDoorPiege == true){
-            this.scene.start('maisonPiege',{
-                x : 6*32,
-                y : 8*32,
-            });
-            touchDoorPiege = false;
+            touchDungeonDoor = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
-        if (touchDoorPNJ == true){
-            this.scene.start('maisonPNJ',{
-                x : 8*32,
-                y : 8*32,
+        if (touchlimite == true){
+            this.scene.start('village',{
+                x : 47 * 32,
+                y : -16*32,
             });
-            touchDoorPNJ = false;
+            touchlimite = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
-        if (touchDoorforest == true){
-            this.scene.start('forest',{
-                x : 0,
-                y : 62 * 32,
-            });
-            touchDoorforest = false;
-            //let player = {x:48, y:32};
-            //this.scene.setData('player',player);
-            //this.scene.events.emit('pos',{x: 48, y: 32});
-        }
-
     }
 }
