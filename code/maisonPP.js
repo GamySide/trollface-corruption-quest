@@ -147,8 +147,8 @@ class MaisonPP extends Phaser.Scene {
     update() {
         this.input.gamepad.once('connected', function (mypad) {
             // 'pad' is a reference to the gamepad that was just connected
-            pad = mypad;
-            console.log(pad);
+            this.pad = mypad;
+            console.log(this.pad);
         });
 
         if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
