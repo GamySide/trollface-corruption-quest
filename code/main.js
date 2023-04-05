@@ -1,6 +1,6 @@
 var config = {
     type: Phaser.AUTO,
-    width: 480, height: 480,
+    width: 640, height: 360,
     input: {
         gamepad: true
     },
