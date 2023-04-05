@@ -129,7 +129,7 @@ class MaisonPiege extends Phaser.Scene {
         }
         this.physics.world.setBounds(-1 * 32, -2 * 32, 20 * 32, 20 * 32);
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(-8 * 32, -8 * 32, 8 * 32, 5 * 32);
+        this.cameras.main.setBounds(-1 * 32, -3 * 32, 20 * 32, 20 * 32);
         this.cameras.main.startFollow(this.player);
     }
 

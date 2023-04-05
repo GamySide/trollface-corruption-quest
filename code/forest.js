@@ -204,7 +204,7 @@ class forest extends Phaser.Scene {
         }
         if (touchDungeonDoor == true){
             this.scene.start('etage1',{
-                x : 15*16,
+                x : 16*16,
                 y : 13*32,
             });
             touchDungeonDoor = false;

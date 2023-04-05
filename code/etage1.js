@@ -16,62 +16,56 @@ class etage1 extends Phaser.Scene {
     }
     preload() {
         this.load.image("placeholderDonjon", "../assets/donjonForet/placeholderDonjon.png");
-        console.log("pas ventil");
-        this.load.tilemapTiledJSON("mapdonjon1", "../assets/donjonForet/salleEtage1.json");
+        this.load.tilemapTiledJSON("mapdonjon1", "../assets/donjonForet/sallesEtage1.json");
         this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
     }
 
     create() {
+        console.log("pas ventil");
         const cartedonjon1 = this.add.tilemap("mapdonjon1");
+        
         const tileset = cartedonjon1.addTilesetImage("placeholderDonjon", "placeholderDonjon");
-        const exit = cartedonjon1.createLayer(
-            "exit",
-            tileset
-        );
+        
         const sol = cartedonjon1.createLayer(
             "sol",
             tileset
         );
-        const corruptionLake = cartedonjon1.createLayer(
-            "corruptionLake",
+        const corruption = cartedonjon1.createLayer(
+            "corruption",
             tileset
         );
         const mur = cartedonjon1.createLayer(
             "mur",
             tileset
         );
-        const coffre = cartedonjon1.createLayer(
-            "coffre",
-            tileset
-        );
-        const blocSwitch = cartedonjon1.createLayer(
-            "blocSwitch",
-            tileset
-        );
+        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
         const porte = cartedonjon1.createLayer(
             "porte",
             tileset
         );
-        const toEtage2 = cartedonjon1.createLayer(
-            "toEtage2",
+        const goOut = cartedonjon1.createLayer(
+            "goOut",
             tileset
         );
-        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+        const goUp = cartedonjon1.createLayer(
+            "goUp",
+            tileset
+        );
+        
+        
 
         mur.setCollisionByExclusion(-1, true);
-        coffre.setCollisionByExclusion(-1, true);
-        toEtage2.setCollisionByExclusion(-1, true);
-        exit.setCollisionByExclusion(-1, true);
+        goUp.setCollisionByExclusion(-1, true);
+        goOut.setCollisionByExclusion(-1, true);
         this.physics.add.collider(this.player, mur);
-        this.physics.add.collider(this.player, coffre);
-        this.physics.add.collider(this.player, toEtage2, goUp);
-        this.physics.add.collider(this.player, exit, goforet);
-        function goUp(){
+        this.physics.add.collider(this.player, goUp, climb);
+        this.physics.add.collider(this.player, goOut, goforet);
+        function climb(){
             touchgoUp = true;
         }
         function goforet(){
-            touchexit = true;
+            toochexit = true;
         }
         
         this.player.setBounce(0);
@@ -136,9 +130,9 @@ class etage1 extends Phaser.Scene {
             up: false,
             down: false,
         }
-        this.physics.world.setBounds(0, -16 * 32, 80 * 32, 80 * 32);
+        this.physics.world.setBounds(-32 * 32, -32 * 32, 81 * 32, 49 * 32);
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(0, -16 * 32, 80 * 32, 80 * 32);
+        this.cameras.main.setBounds(-32 * 32, -32 * 32, 81 * 32, 49 * 32);
         this.cameras.main.startFollow(this.player);
     }
 
@@ -206,9 +200,9 @@ class etage1 extends Phaser.Scene {
 
         }
         if (toochexit == true){
-            this.scene.start('foret',{
-                x : 15*32,
-                y : 13*32,
+            this.scene.start('forest',{
+                x : 132*16,
+                y :5*32,
             });
             toochexit = false;
             //let player = {x:48, y:32};
