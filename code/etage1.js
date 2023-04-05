@@ -4,71 +4,74 @@ var touchDoor = false;
 var turn = false;
 var bomb = false;
 var telecommande = false;
-var touchDungeonDoor = false;
-var touchlimite = false;
-class forest extends Phaser.Scene {
+var touchgoUp = false;
+var toochexit = false;
+class etage1 extends Phaser.Scene {
     constructor() {
-        super('forest');
+        super('etage1');
     }
     init(data){
         this.posX = data.x;
         this.posY = data.y
     }
     preload() {
-        this.load.image("placeholderforest", "../assets/map_ville/placeholderforest.png");
-        this.load.image("arbreDonjon", "../assets/map_ville/arbreDonjon.png");
-        this.load.tilemapTiledJSON("mapForet", "../assets/map_ville/mapForet.json");
+        this.load.image("placeholderDonjon", "../assets/donjonForet/placeholderDonjon.png");
+        console.log("pas ventil");
+        this.load.tilemapTiledJSON("mapdonjon1", "../assets/donjonForet/salleEtage1.json");
         this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
     }
 
     create() {
-        const carteForest = this.add.tilemap("mapForet");
-        const tileset = carteForest.addTilesetImage("placeholderforest", "placeholderforest");
-        const giantTree = carteForest.addTilesetImage("arbreDonjon", "arbreDonjon");
-        const sol = carteForest.createLayer(
+        const cartedonjon1 = this.add.tilemap("mapdonjon1");
+        const tileset = cartedonjon1.addTilesetImage("placeholderDonjon", "placeholderDonjon");
+        const exit = cartedonjon1.createLayer(
+            "exit",
+            tileset
+        );
+        const sol = cartedonjon1.createLayer(
             "sol",
             tileset
         );
-        const versVille = carteForest.createLayer(
-            "versVille",
+        const corruptionLake = cartedonjon1.createLayer(
+            "corruptionLake",
             tileset
         );
-        const entreeDonjon = carteForest.createLayer(
-            "entreeDonjon",
+        const mur = cartedonjon1.createLayer(
+            "mur",
             tileset
         );
-        const parterre = carteForest.createLayer(
-            "parterre",
+        const coffre = cartedonjon1.createLayer(
+            "coffre",
             tileset
         );
-        const arbre = carteForest.createLayer(
-            "arbre",
+        const blocSwitch = cartedonjon1.createLayer(
+            "blocSwitch",
             tileset
         );
-        const arbreDonjon = carteForest.createLayer(
-            "arbreDonjon",
-            giantTree
+        const porte = cartedonjon1.createLayer(
+            "porte",
+            tileset
         );
-        const dungeonDoor = carteForest.createLayer(
-            "dungeonDoor",
-            giantTree
+        const toEtage2 = cartedonjon1.createLayer(
+            "toEtage2",
+            tileset
         );
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
 
-        arbre.setCollisionByExclusion(-1, true);
-        entreeDonjon.setCollisionByExclusion(-1, true);
-        arbreDonjon.setCollisionByExclusion(-1, true);
-        versVille.setCollisionByExclusion(-1, true);
-        this.physics.add.collider(this.player, arbre);
-        this.physics.add.collider(this.player, arbreDonjon);
-        this.physics.add.collider(this.player, entreeDonjon, porteDonjon);
-        this.physics.add.collider(this.player, versVille, goville);
-        function porteDonjon(){
-            touchDungeonDoor = true
+        mur.setCollisionByExclusion(-1, true);
+        coffre.setCollisionByExclusion(-1, true);
+        toEtage2.setCollisionByExclusion(-1, true);
+        exit.setCollisionByExclusion(-1, true);
+        this.physics.add.collider(this.player, mur);
+        this.physics.add.collider(this.player, coffre);
+        this.physics.add.collider(this.player, toEtage2, goUp);
+        this.physics.add.collider(this.player, exit, goforet);
+        function goUp(){
+            touchgoUp = true;
         }
-        function goville(){
-            touchlimite = true
+        function goforet(){
+            touchexit = true;
         }
         
         this.player.setBounce(0);
@@ -202,22 +205,12 @@ class forest extends Phaser.Scene {
             }, 1000)
 
         }
-        if (touchDungeonDoor == true){
-            this.scene.start('etage1',{
-                x : 15*16,
+        if (toochexit == true){
+            this.scene.start('foret',{
+                x : 15*32,
                 y : 13*32,
             });
-            touchDungeonDoor = false;
-            //let player = {x:48, y:32};
-            //this.scene.setData('player',player);
-            //this.scene.events.emit('pos',{x: 48, y: 32});
-        }
-        if (touchlimite == true){
-            this.scene.start('village',{
-                x : 47 * 32,
-                y : -16*32,
-            });
-            touchlimite = false;
+            toochexit = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
