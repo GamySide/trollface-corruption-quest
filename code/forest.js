@@ -6,7 +6,7 @@ var bomb = false;
 var telecommande = false;
 var touchDungeonDoor = false;
 var touchlimite = false;
-class forest extends Phaser.Scene {
+class Forest extends Phaser.Scene {
     constructor() {
         super('forest');
     }

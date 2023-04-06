@@ -11,7 +11,7 @@ var config = {
             debug: true
         }
     },
-    scene: [titlescene,MaisonPP,MaisonPiege,MaisonPNJ,village,forest,etage1],
+    scene: [Titlescene,MaisonPP,MaisonPiege,MaisonPNJ,Village,Forest,Etage1,Deathscreen],
     input: { gamepad: true },
 };
 var game = new Phaser.Game(config);

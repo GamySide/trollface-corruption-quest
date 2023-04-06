@@ -7,14 +7,16 @@ touchDoorPP = false;
 touchDoorPNJ = false;
 touchDoorPiege = false;
 touchDoorforest = false;
-hp = 5;
+hpmax = 10;
+hp = 10;
 damage = false;
+invin = false;
 
-class village extends Phaser.Scene {
+class Village extends Phaser.Scene {
     constructor() {
         super('village');
     }
-    init(data){
+    init(data) {
         this.posX = data.x;
         this.posY = data.y
     }
@@ -82,12 +84,12 @@ class village extends Phaser.Scene {
             tileset
         );
         //this.scene.events.on('pos', function(data){
-            //this.player = this.physics.add.sprite(data.x ,data.y, 'perso');
+        //this.player = this.physics.add.sprite(data.x ,data.y, 'perso');
         //});
         //let player = this.scene.getData('player');
         //init(data);{
-            //this.posX = data.x; 
-            //this.posY = data.y;
+        //this.posX = data.x; 
+        //this.posY = data.y;
         //}
 
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso').setInteractive();
@@ -108,7 +110,7 @@ class village extends Phaser.Scene {
         enterDesert.setCollisionByExclusion(-1, true);
         enterCorruption.setCollisionByExclusion(-1, true);
         corruption_lake.setCollisionByExclusion(-1, true);
-        
+
         this.physics.add.collider(this.player, arbre);
         this.physics.add.collider(this.player, maison_pp);
         this.physics.add.collider(this.player, maison_piege);
@@ -120,26 +122,26 @@ class village extends Phaser.Scene {
         this.physics.add.collider(this.player, enterDesert, porteDesert);
         this.physics.add.collider(this.player, enterCorruption, porteCorruption);
         this.physics.add.collider(this.player, corruption_lake, corruptionDamage);
-        
-        function portePP(){
+
+        function portePP() {
             touchDoorPP = true;
         }
-        function portePiege(){
+        function portePiege() {
             touchDoorPiege = true;
         }
-        function portePNJ(){
+        function portePNJ() {
             touchDoorPNJ = true;
         }
-        function porteForest(){
+        function porteForest() {
             touchDoorforest = true;
         }
-        function porteDesert(){
+        function porteDesert() {
             //touchDoorPNJ = true;
         }
-        function porteCorruption(){
+        function porteCorruption() {
             //touchDoorPNJ = true;
         }
-        function corruptionDamage(){
+        function corruptionDamage() {
             damage = true;
         }
         this.anims.create({
@@ -186,7 +188,7 @@ class village extends Phaser.Scene {
         });
         this.anims.create({
             key: 'hurt',
-            frames: this.anims.generateFrameNumbers('perso', { frame: 39}),
+            frames: this.anims.generateFrameNumbers('perso', { frame: 39 }),
             repeat: 0
         });
 
@@ -277,60 +279,67 @@ class village extends Phaser.Scene {
             }, 1000)
 
         }
-        if (touchDoorPP == true){
-            this.scene.start('maisonPP',{
-                x : 6*32,
-                y : 8*32,
+        if (touchDoorPP == true) {
+            this.scene.start('maisonPP', {
+                x: 6 * 32,
+                y: 8 * 32,
             });
             touchDoorPP = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
-            
+
         }
-        if (touchDoorPiege == true){
-            this.scene.start('maisonPiege',{
-                x : 6*32,
-                y : 8*32,
+        if (touchDoorPiege == true) {
+            this.scene.start('maisonPiege', {
+                x: 6 * 32,
+                y: 8 * 32,
             });
             touchDoorPiege = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
-        if (touchDoorPNJ == true){
-            this.scene.start('maisonPNJ',{
-                x : 8*32,
-                y : 8*32,
+        if (touchDoorPNJ == true) {
+            this.scene.start('maisonPNJ', {
+                x: 8 * 32,
+                y: 8 * 32,
             });
             touchDoorPNJ = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
-        if (touchDoorforest == true){
-            this.scene.start('forest',{
-                x : 0,
-                y : 62 * 32,
+        if (touchDoorforest == true) {
+            this.scene.start('forest', {
+                x: 0,
+                y: 62 * 32,
             });
             touchDoorforest = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
-        if (damage == true){
+        if (damage == true && invin == false) {
+            invin = true
             //this.player.setOffset(5000,5000);
             this.player.alpha = 0.5
-            hp -= 1
             this.serolReset = this.time.addEvent({
                 delay: 1000,
-                callback: ()=>{
+                callback: () => {
+                    hp -= 1
                     this.player.alpha = 1;
+                    invin = false;
                 },
                 loop: false
             })
             console.log(hp)
             damage = false;
+            
+        }
+        if ( hp <=0 ){
+            hp = 0;
+            this.scene.start('deathscreen',{});
         }
     }
 }

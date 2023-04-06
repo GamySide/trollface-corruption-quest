@@ -6,7 +6,7 @@ var bomb = false;
 var telecommande = false;
 var touchgoUp = false;
 var toochexit = false;
-class etage1 extends Phaser.Scene {
+class Etage1 extends Phaser.Scene {
     constructor() {
         super('etage1');
     }
