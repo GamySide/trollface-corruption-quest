@@ -7,8 +7,8 @@ var turn = false;
 var bomb = false;
 var telecommande = false;
 var ilEstSorti = false;
-var hpmax = 10;
-var hp = 10;
+var hpmax;
+var hp;
 
 class Titlescene extends Phaser.Scene {
     constructor() {
@@ -30,7 +30,7 @@ class Titlescene extends Phaser.Scene {
                 hp : 10,
             });
         });
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESC');
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },

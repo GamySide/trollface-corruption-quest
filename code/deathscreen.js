@@ -7,7 +7,7 @@ class Deathscreen extends Phaser.Scene {
     }
     create() {
         this.add.image(320, 180, 'deathscreen');
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESC');
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },

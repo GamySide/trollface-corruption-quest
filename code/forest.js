@@ -6,6 +6,8 @@ var bomb = false;
 var telecommande = false;
 var touchDungeonDoor = false;
 var touchlimite = false;
+var atk = false;
+var hpHere;
 class Forest extends Phaser.Scene {
     constructor() {
         super('forest');
@@ -22,6 +24,10 @@ class Forest extends Phaser.Scene {
         this.load.tilemapTiledJSON("mapForet", "../assets/map_ville/mapForet.json");
         this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('atk', '../assets/atk.png',
+            { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('atkHo', '../assets/Tatk.png',
+            { frameWidth: 64, frameHeight: 32 });
     }
 
     create() {
@@ -57,7 +63,13 @@ class Forest extends Phaser.Scene {
             "dungeonDoor",
             giantTree
         );
+        this.attakLat = this.physics.add.sprite(5000, 5000, 'atklat');
+        this.attakHo = this.physics.add.sprite(5000, 5000, 'atkHo');
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+        this.player.setSize(32,32);
+        this.player.setOffset(0,48);
+
+
 
         arbre.setCollisionByExclusion(-1, true);
         entreeDonjon.setCollisionByExclusion(-1, true);
@@ -118,7 +130,19 @@ class Forest extends Phaser.Scene {
             frameRate: 6,
             repeat: 0
         });
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R');
+        this.anims.create({
+            key: 'attaqueLat',
+            frames: this.anims.generateFrameNumbers('atklat', { start: 0, end: 6 }),
+            frameRate: 14,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'attaqueHo',
+            frames: this.anims.generateFrameNumbers('atkHo', { start: 0, end: 6 }),
+            frameRate: 14,
+            repeat: 0
+        });
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },
@@ -149,12 +173,12 @@ class Forest extends Phaser.Scene {
             console.log(this.pad);
         });
 
-        if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
+        if (this.clavier.Q.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
             this.player.setVelocityY(0)
         }
-        else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
+        else if (this.clavier.D.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityX(160); //alors vitesse positive en X
             this.player.anims.play('right', true); //et animation => gauche
             this.player.setVelocityY(0)
@@ -165,12 +189,12 @@ class Forest extends Phaser.Scene {
             turn = true;
         }
 
-        if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
+        if (this.clavier.Z.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
             this.player.setVelocityY(-160); //alors vitesse négative en X
             this.player.anims.play('up', true); //et animation => gauche
             this.player.setVelocityX(0);
         }
-        else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
+        else if (this.clavier.S.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityY(160); //alors vitesse positive en X
             this.player.anims.play('down', true); //et animation => gauche
             this.player.setVelocityX(0);
@@ -195,7 +219,7 @@ class Forest extends Phaser.Scene {
 
         }
 
-        if (this.clavier.Z.isDown && telecommande == false && bomb == false) {
+        if (this.clavier.E.isDown && telecommande == false && bomb == false) {
             console.log('patate')
             turn = false;
             telecommande = true;
@@ -209,6 +233,8 @@ class Forest extends Phaser.Scene {
             this.scene.start('etage1',{
                 x : 16*16,
                 y : 13*32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             touchDungeonDoor = false;
             //let player = {x:48, y:32};
@@ -219,11 +245,104 @@ class Forest extends Phaser.Scene {
             this.scene.start('village',{
                 x : 47 * 32,
                 y : -16*32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             touchlimite = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
+        }
+        if (damage == true && invin == false) {
+            invin = true;
+
+            //this.player.setOffset(5000,5000);
+            this.player.alpha = 0.5
+            this.serolReset = this.time.addEvent({
+                delay: 500,
+                callback: () => {
+                    this.hp -= 1
+                    this.player.alpha = 1;
+                    invin = false;
+                },
+                loop: false
+            })
+            console.log(this.hp)
+            damage = false;
+            
+        }
+        if ( this.hp <=0 ){
+            this.hp = 0;
+            this.scene.start('deathscreen',{});
+        }
+        if (this.cursors.left.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakLat.anims.play('attaqueLat', true);
+            this.attakLat.x = this.player.x - 32
+            this.attakLat.y = this.player.y
+            this.attakLat.setAngle(180)
+            setTimeout(() => {
+                this.attakLat.x = 5000;
+                this.attakLat.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.right.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakLat.anims.play('attaqueLat', true);
+            this.attakLat.x = this.player.x + 32
+            this.attakLat.y = this.player.y
+            this.attakLat.setAngle(0)
+            setTimeout(() => {
+                this.attakLat.x = 5000;
+                this.attakLat.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.up.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakHo.anims.play('attaqueHo', true);
+            this.attakHo.x = this.player.x
+            this.attakHo.y = this.player.y - 32
+            this.attakHo.setAngle(0)
+            setTimeout(() => {
+                this.attakHo.x = 5000;
+                this.attakHo.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.down.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakHo.anims.play('attaqueHo', true);
+            this.attakHo.x = this.player.x 
+            this.attakHo.y = this.player.y + 48
+            this.attakHo.setAngle(180)
+            setTimeout(() => {
+                this.attakHo.x = 5000;
+                this.attakHo.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (damage == true && invin == false) {
+            invin = true;
+            this.hp -= 1
+            //this.player.setOffset(5000,5000);
+            this.player.alpha = 0.5
+            this.serolReset = this.time.addEvent({
+                delay: 500,
+                callback: () => {
+                    this.player.alpha = 1;
+                    invin = false;
+                },
+                loop: false
+            })
+            console.log(this.hp)
+            damage = false;
+
+        }
+        if (this.hp <= 0) {
+            this.hp = 0;
+            this.scene.start('deathscreen', {});
         }
     }
 }

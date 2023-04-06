@@ -6,11 +6,13 @@ var bomb = false;
 var telecommande = false;
 var touchgoUp = false;
 var toochexit = false;
+var atk = false;
+var hpHere;
 class Etage1 extends Phaser.Scene {
     constructor() {
         super('etage1');
     }
-    init(data){
+    init(data) {
         this.posX = data.x;
         this.posY = data.y;
         this.hp = data.hp;
@@ -21,14 +23,18 @@ class Etage1 extends Phaser.Scene {
         this.load.tilemapTiledJSON("mapdonjon1", "../assets/donjonForet/sallesEtage1.json");
         this.load.spritesheet('perso', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('atk', '../assets/atk.png',
+            { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('atkHo', '../assets/Tatk.png',
+            { frameWidth: 64, frameHeight: 32 });
     }
 
     create() {
         console.log("pas ventil");
         const cartedonjon1 = this.add.tilemap("mapdonjon1");
-        
+
         const tileset = cartedonjon1.addTilesetImage("placeholderDonjon", "placeholderDonjon");
-        
+
         const sol = cartedonjon1.createLayer(
             "sol",
             tileset
@@ -41,7 +47,14 @@ class Etage1 extends Phaser.Scene {
             "mur",
             tileset
         );
+        this.attakLat = this.physics.add.sprite(5000, 5000, 'atklat');
+        this.attakHo = this.physics.add.sprite(5000, 5000, 'atkHo');
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+        this.player.setSize(32,32);
+        this.player.setOffset(0,48);
+
+
+
         const porte = cartedonjon1.createLayer(
             "porte",
             tileset
@@ -54,22 +67,27 @@ class Etage1 extends Phaser.Scene {
             "goUp",
             tileset
         );
-        
-        
+
+
 
         mur.setCollisionByExclusion(-1, true);
         goUp.setCollisionByExclusion(-1, true);
         goOut.setCollisionByExclusion(-1, true);
+        corruption.setCollisionByExclusion(-1, true);
         this.physics.add.collider(this.player, mur);
         this.physics.add.collider(this.player, goUp, climb);
         this.physics.add.collider(this.player, goOut, goforet);
-        function climb(){
+        this.physics.add.collider(this.player, corruption, corruptionDamage);
+        function climb() {
             touchgoUp = true;
         }
-        function goforet(){
+        function goforet() {
             toochexit = true;
         }
-        
+        function corruptionDamage() {
+            damage = true;
+        }
+
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true);
         this.anims.create({
@@ -114,7 +132,19 @@ class Etage1 extends Phaser.Scene {
             frameRate: 6,
             repeat: 0
         });
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R');
+        this.anims.create({
+            key: 'attaqueLat',
+            frames: this.anims.generateFrameNumbers('atklat', { start: 0, end: 6 }),
+            frameRate: 14,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'attaqueHo',
+            frames: this.anims.generateFrameNumbers('atkHo', { start: 0, end: 6 }),
+            frameRate: 14,
+            repeat: 0
+        });
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },
@@ -145,12 +175,12 @@ class Etage1 extends Phaser.Scene {
             console.log(this.pad);
         });
 
-        if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
+        if (this.clavier.Q.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
             this.player.setVelocityY(0)
         }
-        else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
+        else if (this.clavier.D.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityX(160); //alors vitesse positive en X
             this.player.anims.play('right', true); //et animation => gauche
             this.player.setVelocityY(0)
@@ -161,12 +191,12 @@ class Etage1 extends Phaser.Scene {
             turn = true;
         }
 
-        if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
+        if (this.clavier.Z.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
             this.player.setVelocityY(-160); //alors vitesse négative en X
             this.player.anims.play('up', true); //et animation => gauche
             this.player.setVelocityX(0);
         }
-        else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
+        else if (this.clavier.S.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityY(160); //alors vitesse positive en X
             this.player.anims.play('down', true); //et animation => gauche
             this.player.setVelocityX(0);
@@ -191,7 +221,7 @@ class Etage1 extends Phaser.Scene {
 
         }
 
-        if (this.clavier.Z.isDown && telecommande == false && bomb == false) {
+        if (this.clavier.E.isDown && telecommande == false && bomb == false) {
             console.log('patate')
             turn = false;
             telecommande = true;
@@ -201,15 +231,108 @@ class Etage1 extends Phaser.Scene {
             }, 1000)
 
         }
-        if (toochexit == true){
-            this.scene.start('forest',{
-                x : 132*16,
-                y :5*32,
+        if (toochexit == true) {
+            this.scene.start('forest', {
+                x: 132 * 16,
+                y: 5 * 32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             toochexit = false;
             //let player = {x:48, y:32};
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
+        }
+        if (damage == true && invin == false) {
+            invin = true;
+
+            //this.player.setOffset(5000,5000);
+            this.player.alpha = 0.5
+            this.serolReset = this.time.addEvent({
+                delay: 500,
+                callback: () => {
+                    this.hp -= 1
+                    this.player.alpha = 1;
+                    invin = false;
+                },
+                loop: false
+            })
+            console.log(this.hp)
+            damage = false;
+
+        }
+        if (this.hp <= 0) {
+            this.hp = 0;
+            this.scene.start('deathscreen', {});
+        }
+        if (this.cursors.left.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakLat.anims.play('attaqueLat', true);
+            this.attakLat.x = this.player.x - 32
+            this.attakLat.y = this.player.y
+            this.attakLat.setAngle(180)
+            setTimeout(() => {
+                this.attakLat.x = 5000;
+                this.attakLat.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.right.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakLat.anims.play('attaqueLat', true);
+            this.attakLat.x = this.player.x + 32
+            this.attakLat.y = this.player.y
+            this.attakLat.setAngle(0)
+            setTimeout(() => {
+                this.attakLat.x = 5000;
+                this.attakLat.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.up.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakHo.anims.play('attaqueHo', true);
+            this.attakHo.x = this.player.x
+            this.attakHo.y = this.player.y - 32
+            this.attakHo.setAngle(0)
+            setTimeout(() => {
+                this.attakHo.x = 5000;
+                this.attakHo.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.down.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakHo.anims.play('attaqueHo', true);
+            this.attakHo.x = this.player.x 
+            this.attakHo.y = this.player.y + 48
+            this.attakHo.setAngle(180)
+            setTimeout(() => {
+                this.attakHo.x = 5000;
+                this.attakHo.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (damage == true && invin == false) {
+            invin = true;
+            this.hp -= 1
+            //this.player.setOffset(5000,5000);
+            this.player.alpha = 0.5
+            this.serolReset = this.time.addEvent({
+                delay: 500,
+                callback: () => {
+                    this.player.alpha = 1;
+                    invin = false;
+                },
+                loop: false
+            })
+            console.log(this.hp)
+            damage = false;
+
+        }
+        if (this.hp <= 0) {
+            this.hp = 0;
+            this.scene.start('deathscreen', {});
         }
     }
 }

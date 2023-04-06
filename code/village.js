@@ -9,12 +9,13 @@ touchDoorPiege = false;
 touchDoorforest = false;
 damage = false;
 invin = false;
-
+var atk = false;
+var hpHere;
 class Village extends Phaser.Scene {
     constructor() {
         super('village');
     }
-    init(data){
+    init(data) {
         this.posX = data.x;
         this.posY = data.y;
         this.hp = data.hp;
@@ -25,6 +26,10 @@ class Village extends Phaser.Scene {
         this.load.tilemapTiledJSON("village", "../assets/map_ville/mapVille.json");
         this.load.spritesheet('village', '../assets/perso.png',
             { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('atk', '../assets/atk.png',
+            { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('atkHo', '../assets/Tatk.png',
+            { frameWidth: 64, frameHeight: 32 });
     }
 
     create() {
@@ -92,9 +97,13 @@ class Village extends Phaser.Scene {
         //this.posY = data.y;
         //}
 
-        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso').setInteractive();
-        this.player.setSize(32, 64);
-        this.player.setOffset(0, 0);
+        this.attakLat = this.physics.add.sprite(5000, 5000, 'atklat');
+        this.attakHo = this.physics.add.sprite(5000, 5000, 'atkHo');
+        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+        this.player.setSize(32,32);
+        this.player.setOffset(0,48);
+        
+
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true);
         //this.physics.add.collider(this.player);
@@ -191,8 +200,19 @@ class Village extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('perso', { frame: 39 }),
             repeat: 0
         });
-
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESC');
+        this.anims.create({
+            key: 'attaqueLat',
+            frames: this.anims.generateFrameNumbers('atklat', { start: 0, end: 6 }),
+            frameRate: 14,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'attaqueHo',
+            frames: this.anims.generateFrameNumbers('atkHo', { start: 0, end: 6 }),
+            frameRate: 14,
+            repeat: 0
+        });
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },
@@ -223,12 +243,12 @@ class Village extends Phaser.Scene {
             console.log(this.pad);
         });
 
-        if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false && damage == false) { //si la touche gauche est appuyée
+        if (this.clavier.Q.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false && damage == false) { //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
             this.player.setVelocityY(0)
         }
-        else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false && damage == false) { //sinon si la touche droite est appuyée
+        else if (this.clavier.D.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false && damage == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityX(160); //alors vitesse positive en X
             this.player.anims.play('right', true); //et animation => gauche
             this.player.setVelocityY(0)
@@ -239,12 +259,12 @@ class Village extends Phaser.Scene {
             turn = true;
         }
 
-        if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false && damage == false) { //si la touche gauche est appuyée
+        if (this.clavier.Z.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false && damage == false) { //si la touche gauche est appuyée
             this.player.setVelocityY(-160); //alors vitesse négative en X
             this.player.anims.play('up', true); //et animation => gauche
             this.player.setVelocityX(0);
         }
-        else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false && damage == false) { //sinon si la touche droite est appuyée
+        else if (this.clavier.S.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false && damage == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityY(160); //alors vitesse positive en X
             this.player.anims.play('down', true); //et animation => gauche
             this.player.setVelocityX(0);
@@ -269,7 +289,7 @@ class Village extends Phaser.Scene {
 
         }
 
-        if (this.clavier.Z.isDown && telecommande == false && bomb == false && damage == false) {
+        if (this.clavier.E.isDown && telecommande == false && bomb == false && damage == false) {
             console.log('patate')
             turn = false;
             telecommande = true;
@@ -283,6 +303,8 @@ class Village extends Phaser.Scene {
             this.scene.start('maisonPP', {
                 x: 6 * 32,
                 y: 8 * 32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             touchDoorPP = false;
             //let player = {x:48, y:32};
@@ -294,6 +316,8 @@ class Village extends Phaser.Scene {
             this.scene.start('maisonPiege', {
                 x: 6 * 32,
                 y: 8 * 32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             touchDoorPiege = false;
             //let player = {x:48, y:32};
@@ -304,6 +328,8 @@ class Village extends Phaser.Scene {
             this.scene.start('maisonPNJ', {
                 x: 8 * 32,
                 y: 8 * 32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             touchDoorPNJ = false;
             //let player = {x:48, y:32};
@@ -313,7 +339,9 @@ class Village extends Phaser.Scene {
         if (touchDoorforest == true) {
             this.scene.start('forest', {
                 x: 0,
-                y: 62 * 32,
+                y: 60 * 32,
+                hp: this.hp,
+                hpmax: this.hpmax,
             });
             touchDoorforest = false;
             //let player = {x:48, y:32};
@@ -322,13 +350,12 @@ class Village extends Phaser.Scene {
         }
         if (damage == true && invin == false) {
             invin = true;
-
+            this.hp -= 1
             //this.player.setOffset(5000,5000);
             this.player.alpha = 0.5
             this.serolReset = this.time.addEvent({
                 delay: 500,
                 callback: () => {
-                    this.hp -= 1
                     this.player.alpha = 1;
                     invin = false;
                 },
@@ -336,11 +363,59 @@ class Village extends Phaser.Scene {
             })
             console.log(this.hp)
             damage = false;
-            
+
         }
-        if ( this.hp <=0 ){
+        if (this.hp <= 0) {
             this.hp = 0;
-            this.scene.start('deathscreen',{});
+            this.scene.start('deathscreen', {});
+        }
+        if (this.cursors.left.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakLat.anims.play('attaqueLat', true);
+            this.attakLat.x = this.player.x - 32
+            this.attakLat.y = this.player.y
+            this.attakLat.setAngle(180)
+            setTimeout(() => {
+                this.attakLat.x = 5000;
+                this.attakLat.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.right.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakLat.anims.play('attaqueLat', true);
+            this.attakLat.x = this.player.x + 32
+            this.attakLat.y = this.player.y
+            this.attakLat.setAngle(0)
+            setTimeout(() => {
+                this.attakLat.x = 5000;
+                this.attakLat.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.up.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakHo.anims.play('attaqueHo', true);
+            this.attakHo.x = this.player.x
+            this.attakHo.y = this.player.y - 32
+            this.attakHo.setAngle(0)
+            setTimeout(() => {
+                this.attakHo.x = 5000;
+                this.attakHo.y = 5000;
+                atk = false;
+            }, 500)
+        }
+        if (this.cursors.down.isDown && atk == false && bomb == false && telecommande == false) {
+            atk = true
+            this.attakHo.anims.play('attaqueHo', true);
+            this.attakHo.x = this.player.x 
+            this.attakHo.y = this.player.y + 48
+            this.attakHo.setAngle(180)
+            setTimeout(() => {
+                this.attakHo.x = 5000;
+                this.attakHo.y = 5000;
+                atk = false;
+            }, 500)
         }
     }
 }
