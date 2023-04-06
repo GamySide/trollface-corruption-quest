@@ -14,9 +14,11 @@ class Village extends Phaser.Scene {
     constructor() {
         super('village');
     }
-    init(data) {
+    init(data){
         this.posX = data.x;
-        this.posY = data.y
+        this.posY = data.y;
+        this.hp = data.hp;
+        this.hpmax = data.hpmax
     }
     preload() {
         this.load.image("placeholder1", "../assets/map_ville/placeholder1.png");
@@ -190,7 +192,7 @@ class Village extends Phaser.Scene {
             repeat: 0
         });
 
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESCAPE');
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },
@@ -319,24 +321,25 @@ class Village extends Phaser.Scene {
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
         if (damage == true && invin == false) {
-            invin = true
+            invin = true;
+
             //this.player.setOffset(5000,5000);
             this.player.alpha = 0.5
             this.serolReset = this.time.addEvent({
-                delay: 1000,
+                delay: 500,
                 callback: () => {
-                    hp -= 1
+                    this.hp -= 1
                     this.player.alpha = 1;
                     invin = false;
                 },
                 loop: false
             })
-            console.log(hp)
+            console.log(this.hp)
             damage = false;
             
         }
-        if ( hp <=0 ){
-            hp = 0;
+        if ( this.hp <=0 ){
+            this.hp = 0;
             this.scene.start('deathscreen',{});
         }
     }

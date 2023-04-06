@@ -26,8 +26,8 @@ class Titlescene extends Phaser.Scene {
             this.scene.scene.start('maisonPP',{
                 x : 13*16,
                 y :4*32,
-                hpmax : hpmax,
-                hp : hp,
+                hpmax : 10,
+                hp : 10,
             });
         });
 

@@ -12,7 +12,9 @@ class Forest extends Phaser.Scene {
     }
     init(data){
         this.posX = data.x;
-        this.posY = data.y
+        this.posY = data.y;
+        this.hp = data.hp;
+        this.hpmax = data.hpmax
     }
     preload() {
         this.load.image("placeholderforest", "../assets/map_ville/placeholderforest.png");
@@ -23,6 +25,7 @@ class Forest extends Phaser.Scene {
     }
 
     create() {
+
         const carteForest = this.add.tilemap("mapForet");
         const tileset = carteForest.addTilesetImage("placeholderforest", "placeholderforest");
         const giantTree = carteForest.addTilesetImage("arbreDonjon", "arbreDonjon");

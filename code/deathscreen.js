@@ -10,12 +10,11 @@ class Deathscreen extends Phaser.Scene {
         this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESCAPE');
     }
     update() {
-        console.log("pk")
-        if (this.clavier.ENTER.isDown){
-            this.scene.start('titlescene',{});
+        if (this.clavier.ENTER.isDown) {
+            location.reload();
         }
-        if (this.clavier.ESCAPE.isDown){
-            this.scene.start('titlescene',{});
+        if (this.clavier.A.isDown) {
+            window.close();
         }
     }
 

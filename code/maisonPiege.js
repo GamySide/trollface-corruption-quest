@@ -11,7 +11,9 @@ class MaisonPiege extends Phaser.Scene {
     }
     init(data){
         this.posX = data.x;
-        this.posY = data.y
+        this.posY = data.y;
+        this.hp = data.hp;
+        this.hpmax = data.hpmax
     }
     preload() {
         this.load.image("placeholderMaison", "../assets/map_ville/placeholderMaison.png");

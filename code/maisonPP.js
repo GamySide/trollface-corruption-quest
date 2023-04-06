@@ -7,8 +7,6 @@ var turn = false;
 var bomb = false;
 var telecommande = false;
 var ilEstSorti = false;
-var hpmax = 10;
-var hp = 10;
 
 class MaisonPP extends Phaser.Scene {
     constructor() {
@@ -28,6 +26,7 @@ class MaisonPP extends Phaser.Scene {
     }
 
     create() {
+        console.log(this.hp)
         const cartemaisonPP = this.add.tilemap("maisonPP");
         const tileset = cartemaisonPP.addTilesetImage("placeholderMaison", "placeholderMaison");
 
