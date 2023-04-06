@@ -7,6 +7,8 @@ touchDoorPP = false;
 touchDoorPNJ = false;
 touchDoorPiege = false;
 touchDoorforest = false;
+hp = 5;
+damage = false;
 
 class village extends Phaser.Scene {
     constructor() {
@@ -88,10 +90,12 @@ class village extends Phaser.Scene {
             //this.posY = data.y;
         //}
 
-        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
+        this.player = this.physics.add.sprite(this.posX, this.posY, 'perso').setInteractive();
+        this.player.setSize(32, 64);
+        this.player.setOffset(0, 0);
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player);
+        //this.physics.add.collider(this.player);
         arbre.setCollisionByExclusion(-1, true);
         maison_pp.setCollisionByExclusion(-1, true);
         maison_piege.setCollisionByExclusion(-1, true);
@@ -103,6 +107,7 @@ class village extends Phaser.Scene {
         enterForest.setCollisionByExclusion(-1, true);
         enterDesert.setCollisionByExclusion(-1, true);
         enterCorruption.setCollisionByExclusion(-1, true);
+        corruption_lake.setCollisionByExclusion(-1, true);
         
         this.physics.add.collider(this.player, arbre);
         this.physics.add.collider(this.player, maison_pp);
@@ -114,24 +119,28 @@ class village extends Phaser.Scene {
         this.physics.add.collider(this.player, enterForest, porteForest);
         this.physics.add.collider(this.player, enterDesert, porteDesert);
         this.physics.add.collider(this.player, enterCorruption, porteCorruption);
+        this.physics.add.collider(this.player, corruption_lake, corruptionDamage);
         
         function portePP(){
-            touchDoorPP = true
+            touchDoorPP = true;
         }
         function portePiege(){
-            touchDoorPiege = true
+            touchDoorPiege = true;
         }
         function portePNJ(){
-            touchDoorPNJ = true
+            touchDoorPNJ = true;
         }
         function porteForest(){
-            touchDoorforest = true
+            touchDoorforest = true;
         }
         function porteDesert(){
-            touchDoorPNJ = true
+            //touchDoorPNJ = true;
         }
         function porteCorruption(){
-            touchDoorPNJ = true
+            //touchDoorPNJ = true;
+        }
+        function corruptionDamage(){
+            damage = true;
         }
         this.anims.create({
             key: 'left',
@@ -175,6 +184,12 @@ class village extends Phaser.Scene {
             frameRate: 6,
             repeat: 0
         });
+        this.anims.create({
+            key: 'hurt',
+            frames: this.anims.generateFrameNumbers('perso', { frame: 39}),
+            repeat: 0
+        });
+
         this.clavier = this.input.keyboard.addKeys('A,Z,E,R');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
@@ -206,12 +221,12 @@ class village extends Phaser.Scene {
             console.log(this.pad);
         });
 
-        if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false) { //si la touche gauche est appuyée
+        if (this.cursors.left.isDown || this.pad.leftStick.x <= -0.5 || this.pad.left == true && bomb == false && telecommande == false && damage == false) { //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
             this.player.setVelocityY(0)
         }
-        else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
+        else if (this.cursors.right.isDown || this.pad.leftStick.x >= 0.5 && bomb == false && telecommande == false && damage == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityX(160); //alors vitesse positive en X
             this.player.anims.play('right', true); //et animation => gauche
             this.player.setVelocityY(0)
@@ -222,12 +237,12 @@ class village extends Phaser.Scene {
             turn = true;
         }
 
-        if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false) { //si la touche gauche est appuyée
+        if (this.cursors.up.isDown || this.pad.leftStick.y <= -0.5 && bomb == false && telecommande == false && damage == false) { //si la touche gauche est appuyée
             this.player.setVelocityY(-160); //alors vitesse négative en X
             this.player.anims.play('up', true); //et animation => gauche
             this.player.setVelocityX(0);
         }
-        else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false) { //sinon si la touche droite est appuyée
+        else if (this.cursors.down.isDown || this.pad.leftStick.y >= 0.5 && bomb == false && telecommande == false && damage == false) { //sinon si la touche droite est appuyée
             this.player.setVelocityY(160); //alors vitesse positive en X
             this.player.anims.play('down', true); //et animation => gauche
             this.player.setVelocityX(0);
@@ -235,13 +250,13 @@ class village extends Phaser.Scene {
         else { //sinon si la touche droite est appuyée
             //player.anims.play('turn', true); //et animation => gauche
             this.player.setVelocityY(0);
-            if (turn == true && bomb == false && telecommande == false) {
+            if (turn == true && bomb == false && telecommande == false && damage == false) {
                 this.player.anims.play('turn', true); //et animation => gauche
             }
         }
         turn = false;
 
-        if (this.clavier.A.isDown && bomb == false && telecommande == false) {
+        if (this.clavier.A.isDown && bomb == false && telecommande == false && damage == false) {
             console.log('patate')
             turn = false;
             bomb = true;
@@ -252,7 +267,7 @@ class village extends Phaser.Scene {
 
         }
 
-        if (this.clavier.Z.isDown && telecommande == false && bomb == false) {
+        if (this.clavier.Z.isDown && telecommande == false && bomb == false && damage == false) {
             console.log('patate')
             turn = false;
             telecommande = true;
@@ -303,6 +318,19 @@ class village extends Phaser.Scene {
             //this.scene.setData('player',player);
             //this.scene.events.emit('pos',{x: 48, y: 32});
         }
-
+        if (damage == true){
+            //this.player.setOffset(5000,5000);
+            this.player.alpha = 0.5
+            hp -= 1
+            this.serolReset = this.time.addEvent({
+                delay: 1000,
+                callback: ()=>{
+                    this.player.alpha = 1;
+                },
+                loop: false
+            })
+            console.log(hp)
+            damage = false;
+        }
     }
 }
