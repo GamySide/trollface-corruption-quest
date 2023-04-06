@@ -7,6 +7,8 @@ var turn = false;
 var bomb = false;
 var telecommande = false;
 var ilEstSorti = false;
+var hpmax = 10;
+var hp = 10;
 
 class MaisonPP extends Phaser.Scene {
     constructor() {
@@ -14,7 +16,9 @@ class MaisonPP extends Phaser.Scene {
     }
     init(data){
         this.posX = data.x;
-        this.posY = data.y
+        this.posY = data.y;
+        this.hp = data.hp;
+        this.hpmax = data.hpmax
     }
     preload() {
         this.load.image("placeholderMaison", "../assets/map_ville/placeholderMaison.png");
@@ -211,6 +215,8 @@ class MaisonPP extends Phaser.Scene {
             this.scene.start('village',{
                 x : 32,
                 y : 32,
+                hp: hp,
+                hpmax: hpmax,
             });
             touchDoor = false;
             ilEstSorti = true;

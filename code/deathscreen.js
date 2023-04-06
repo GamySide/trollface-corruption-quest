@@ -14,6 +14,9 @@ class Deathscreen extends Phaser.Scene {
         if (this.clavier.ENTER.isDown){
             this.scene.start('titlescene',{});
         }
+        if (this.clavier.ESCAPE.isDown){
+            this.scene.start('titlescene',{});
+        }
     }
 
 }

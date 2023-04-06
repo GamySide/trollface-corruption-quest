@@ -1,3 +1,15 @@
+var posX;
+var posY;
+var spawnX;
+var spawnY;
+var touchDoor = false;
+var turn = false;
+var bomb = false;
+var telecommande = false;
+var ilEstSorti = false;
+var hpmax = 10;
+var hp = 10;
+
 class Titlescene extends Phaser.Scene {
     constructor() {
         super('titlescene');
@@ -11,7 +23,12 @@ class Titlescene extends Phaser.Scene {
         this.add.image(320, 300, 'start');
         this.buttonS = this.add.sprite(320,300, 'start').setInteractive();
         this.buttonS.on('pointerdown', function () {
-            this.scene.scene.start('maisonPP');
+            this.scene.scene.start('maisonPP',{
+                x : 13*16,
+                y :4*32,
+                hpmax : hpmax,
+                hp : hp,
+            });
         });
 
     }

@@ -7,8 +7,6 @@ touchDoorPP = false;
 touchDoorPNJ = false;
 touchDoorPiege = false;
 touchDoorforest = false;
-hpmax = 10;
-hp = 10;
 damage = false;
 invin = false;
 
@@ -192,7 +190,7 @@ class Village extends Phaser.Scene {
             repeat: 0
         });
 
-        this.clavier = this.input.keyboard.addKeys('A,Z,E,R');
+        this.clavier = this.input.keyboard.addKeys('A,Z,E,R,ENTER,ESCAPE');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
             leftStick: { x: 0, y: 0 },
