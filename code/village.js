@@ -30,7 +30,13 @@ class Village extends Phaser.Scene {
             { frameWidth: 32, frameHeight: 64 });
         this.load.spritesheet('atkHo', '../assets/Tatk.png',
             { frameWidth: 64, frameHeight: 32 });
+        this.load.image("uiFull", "../assets/uiFull.png");
+        this.load.image("ui4", "../assets/ui4.png");
+        this.load.image("ui3", "../assets/ui3.png");
+        this.load.image("ui2", "../assets/ui2.png");
+        this.load.image("ui1", "../assets/ui1.png");
     }
+
 
     create() {
         const carteVillage = this.add.tilemap("village");
@@ -102,7 +108,11 @@ class Village extends Phaser.Scene {
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
         this.player.setSize(32,32);
         this.player.setOffset(0,48);
-        
+        this.uiFull = this.physics.add.sprite(5000, 5000, 'uiFull');
+        this.ui4 = this.physics.add.sprite(5000, 5000, 'ui4');
+        this.ui3 = this.physics.add.sprite(5000, 5000, 'ui3');
+        this.ui2 = this.physics.add.sprite(5000, 5000, 'ui2');
+        this.ui1 = this.physics.add.sprite(5000, 5000, 'ui1');
 
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true);
@@ -212,6 +222,32 @@ class Village extends Phaser.Scene {
             frameRate: 14,
             repeat: 0
         });
+        this.anims.create({
+            key: 'uiFull',
+            frames: this.anims.generateFrameNumbers('uiFull', {frame : 0}),
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'ui4',
+            frames: this.anims.generateFrameNumbers('ui4', {frame : 0}),
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'ui3',
+            frames: this.anims.generateFrameNumbers('ui3', {frame : 0}),
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'ui2',
+            frames: this.anims.generateFrameNumbers('ui2', {frame : 0}),
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'ui1',
+            frames: this.anims.generateFrameNumbers('ui1', {frame : 0}),
+            repeat: 0
+        });
+        
         this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {

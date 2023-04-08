@@ -29,6 +29,11 @@ class MaisonPP extends Phaser.Scene {
             { frameWidth: 32, frameHeight: 64 });
         this.load.spritesheet('atkHo', '../assets/Tatk.png',
             { frameWidth: 64, frameHeight: 32 });
+        this.load.image("uiFull", "../assets/uiFull.png");
+        this.load.image("ui4", "../assets/ui4.png");
+        this.load.image("ui3", "../assets/ui3.png");
+        this.load.image("ui2", "../assets/ui2.png");
+        this.load.image("ui1", "../assets/ui1.png");
     }
 
     create() {
@@ -73,6 +78,11 @@ class MaisonPP extends Phaser.Scene {
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
         this.player.setSize(32,32);
         this.player.setOffset(0,48);
+        this.uiFull = this.physics.add.sprite(5000, 5000, 'uiFull');
+        this.ui4 = this.physics.add.sprite(5000, 5000, 'ui4');
+        this.ui3 = this.physics.add.sprite(5000, 5000, 'ui3');
+        this.ui2 = this.physics.add.sprite(5000, 5000, 'ui2');
+        this.ui1 = this.physics.add.sprite(5000, 5000, 'ui1');
         
 
 
@@ -147,6 +157,7 @@ class MaisonPP extends Phaser.Scene {
             frameRate: 14,
             repeat: 0
         });
+
         this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
@@ -169,6 +180,7 @@ class MaisonPP extends Phaser.Scene {
         //  ajout du champs de la caméra de taille identique à celle du monde
         //this.cameras.main.setBounds(-1 * 32, -3 * 32, 20 * 32, 20 * 32);
         this.cameras.main.startFollow(this.player);
+        this.uiFull.main.startFollow(this.cameras);
     }
 
     update() {
@@ -340,6 +352,10 @@ class MaisonPP extends Phaser.Scene {
         if (this.hp <= 0) {
             this.hp = 0;
             this.scene.start('deathscreen', {});
+        }
+        if (this.hp == 10 || this.hp == 9) {
+            this.uiFull.x = 20;
+            this.uiFull.y = 20;
         }
     }
 }
