@@ -29,7 +29,7 @@ class MaisonPP extends Phaser.Scene {
             { frameWidth: 32, frameHeight: 64 });
         this.load.spritesheet('atkHo', '../assets/Tatk.png',
             { frameWidth: 64, frameHeight: 32 });
-        this.load.image("uiFull", "../assets/uiFull.png");
+        this.load.image("uifull", "../assets/uiFull.png");
         this.load.image("ui4", "../assets/ui4.png");
         this.load.image("ui3", "../assets/ui3.png");
         this.load.image("ui2", "../assets/ui2.png");
@@ -78,18 +78,16 @@ class MaisonPP extends Phaser.Scene {
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
         this.player.setSize(32,32);
         this.player.setOffset(0,48);
-        this.uiFull = this.physics.add.sprite(5000, 5000, 'uiFull');
-        this.ui4 = this.physics.add.sprite(5000, 5000, 'ui4');
-        this.ui3 = this.physics.add.sprite(5000, 5000, 'ui3');
-        this.ui2 = this.physics.add.sprite(5000, 5000, 'ui2');
-        this.ui1 = this.physics.add.sprite(5000, 5000, 'ui1');
         
-
-
         const murdevant = cartemaisonPP.createLayer(
             "murdevant",
             tileset
         );
+        this.ui1 = this.add.image(135, 75, "ui1").setScrollFactor(0).setScale(1);
+        this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
+        this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
+        this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
+        this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
 
         props.setCollisionByExclusion(-1, true);
         wall.setCollisionByExclusion(-1, true);
@@ -180,7 +178,6 @@ class MaisonPP extends Phaser.Scene {
         //  ajout du champs de la caméra de taille identique à celle du monde
         //this.cameras.main.setBounds(-1 * 32, -3 * 32, 20 * 32, 20 * 32);
         this.cameras.main.startFollow(this.player);
-        this.uiFull.main.startFollow(this.cameras);
     }
 
     update() {
@@ -354,8 +351,19 @@ class MaisonPP extends Phaser.Scene {
             this.scene.start('deathscreen', {});
         }
         if (this.hp == 10 || this.hp == 9) {
-            this.uiFull.x = 20;
-            this.uiFull.y = 20;
+            this.ui.setTexture('uifull')
+        }
+        if (this.hp == 8 || this.hp == 7) {
+            this.ui.setTexture('ui4')
+        }
+        if (this.hp == 6 || this.hp == 5) {
+            this.ui.setTexture('ui3')
+        }
+        if (this.hp == 4 || this.hp == 3) {
+            this.ui.setTexture('ui2')
+        }
+        if (this.hp == 2 || this.hp == 1) {
+            this.ui.setTexture('ui1')
         }
     }
 }

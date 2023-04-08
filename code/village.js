@@ -108,11 +108,13 @@ class Village extends Phaser.Scene {
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
         this.player.setSize(32,32);
         this.player.setOffset(0,48);
-        this.uiFull = this.physics.add.sprite(5000, 5000, 'uiFull');
-        this.ui4 = this.physics.add.sprite(5000, 5000, 'ui4');
-        this.ui3 = this.physics.add.sprite(5000, 5000, 'ui3');
-        this.ui2 = this.physics.add.sprite(5000, 5000, 'ui2');
-        this.ui1 = this.physics.add.sprite(5000, 5000, 'ui1');
+        
+        this.ui1 = this.add.image(135, 75, "ui1").setScrollFactor(0).setScale(1);
+        this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
+        this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
+        this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
+        this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
+        
 
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true);
@@ -220,31 +222,6 @@ class Village extends Phaser.Scene {
             key: 'attaqueHo',
             frames: this.anims.generateFrameNumbers('atkHo', { start: 0, end: 6 }),
             frameRate: 14,
-            repeat: 0
-        });
-        this.anims.create({
-            key: 'uiFull',
-            frames: this.anims.generateFrameNumbers('uiFull', {frame : 0}),
-            repeat: 0
-        });
-        this.anims.create({
-            key: 'ui4',
-            frames: this.anims.generateFrameNumbers('ui4', {frame : 0}),
-            repeat: 0
-        });
-        this.anims.create({
-            key: 'ui3',
-            frames: this.anims.generateFrameNumbers('ui3', {frame : 0}),
-            repeat: 0
-        });
-        this.anims.create({
-            key: 'ui2',
-            frames: this.anims.generateFrameNumbers('ui2', {frame : 0}),
-            repeat: 0
-        });
-        this.anims.create({
-            key: 'ui1',
-            frames: this.anims.generateFrameNumbers('ui1', {frame : 0}),
             repeat: 0
         });
         
@@ -452,6 +429,25 @@ class Village extends Phaser.Scene {
                 this.attakHo.y = 5000;
                 atk = false;
             }, 500)
+        }
+        if (this.hp <= 0) {
+            this.hp = 0;
+            this.scene.start('deathscreen', {});
+        }
+        if (this.hp == 10 || this.hp == 9) {
+            this.ui.setTexture('uifull')
+        }
+        if (this.hp == 8 || this.hp == 7) {
+            this.ui.setTexture('ui4')
+        }
+        if (this.hp == 6 || this.hp == 5) {
+            this.ui.setTexture('ui3')
+        }
+        if (this.hp == 4 || this.hp == 3) {
+            this.ui.setTexture('ui2')
+        }
+        if (this.hp == 2 || this.hp == 1) {
+            this.ui.setTexture('ui1')
         }
     }
 }

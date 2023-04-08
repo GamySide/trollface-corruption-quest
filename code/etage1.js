@@ -27,7 +27,7 @@ class Etage1 extends Phaser.Scene {
             { frameWidth: 32, frameHeight: 64 });
         this.load.spritesheet('atkHo', '../assets/Tatk.png',
             { frameWidth: 64, frameHeight: 32 });
-        this.load.image("uiFull", "../assets/uiFull.png");
+        this.load.image("uifull", "../assets/uiFull.png");
         this.load.image("ui4", "../assets/ui4.png");
         this.load.image("ui3", "../assets/ui3.png");
         this.load.image("ui2", "../assets/ui2.png");
@@ -55,13 +55,8 @@ class Etage1 extends Phaser.Scene {
         this.attakLat = this.physics.add.sprite(5000, 5000, 'atklat');
         this.attakHo = this.physics.add.sprite(5000, 5000, 'atkHo');
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
-        this.player.setSize(32,32);
-        this.player.setOffset(0,48);
-        this.uiFull = this.physics.add.sprite(5000, 5000, 'uiFull');
-        this.ui4 = this.physics.add.sprite(5000, 5000, 'ui4');
-        this.ui3 = this.physics.add.sprite(5000, 5000, 'ui3');
-        this.ui2 = this.physics.add.sprite(5000, 5000, 'ui2');
-        this.ui1 = this.physics.add.sprite(5000, 5000, 'ui1');
+        this.player.setSize(32, 32);
+        this.player.setOffset(0, 48);
 
 
         const porte = cartedonjon1.createLayer(
@@ -76,7 +71,11 @@ class Etage1 extends Phaser.Scene {
             "goUp",
             tileset
         );
-
+        this.uiFull = this.add.image(360, 220, "uifull").setScrollFactor(0).setScale(1);
+        this.ui4 = this.add.image(360, 220, "ui4").setScrollFactor(0).setScale(1);
+        this.ui3 = this.add.image(360, 220, "ui3").setScrollFactor(0).setScale(1);
+        this.ui2 = this.add.image(360, 220, "ui2").setScrollFactor(0).setScale(1);
+        this.ui1 = this.add.image(360, 220, "ui1").setScrollFactor(0).setScale(1);
 
 
         mur.setCollisionByExclusion(-1, true);
@@ -154,31 +153,31 @@ class Etage1 extends Phaser.Scene {
             repeat: 0
         });
         this.anims.create({
-            key: 'uiFull',
-            frames: this.anims.generateFrameNumbers('uiFull', {frame : 0}),
+            key: 'full',
+            frames: [{ key: 'ui', frame: 0 }],
             repeat: 0
         });
         this.anims.create({
-            key: 'ui4',
-            frames: this.anims.generateFrameNumbers('ui4', {frame : 0}),
+            key: '4',
+            frames: [{ key: 'ui', frame: 1 }],
             repeat: 0
         });
         this.anims.create({
-            key: 'ui3',
-            frames: this.anims.generateFrameNumbers('ui3', {frame : 0}),
+            key: '3',
+            frames: [{ key: 'ui', frame: 2 }],
             repeat: 0
         });
         this.anims.create({
-            key: 'ui2',
-            frames: this.anims.generateFrameNumbers('ui2', {frame : 0}),
+            key: '2',
+            frames: [{ key: 'ui', frame: 3 }],
             repeat: 0
         });
         this.anims.create({
-            key: 'ui1',
-            frames: this.anims.generateFrameNumbers('ui1', {frame : 0}),
+            key: '1',
+            frames: [{ key: 'ui', frame: 4 }],
             repeat: 0
         });
-        
+
         this.clavier = this.input.keyboard.addKeys('A,Z,E,R,Q,S,D,ENTER,ESC');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pad = {
@@ -339,7 +338,7 @@ class Etage1 extends Phaser.Scene {
         if (this.cursors.down.isDown && atk == false && bomb == false && telecommande == false) {
             atk = true
             this.attakHo.anims.play('attaqueHo', true);
-            this.attakHo.x = this.player.x 
+            this.attakHo.x = this.player.x
             this.attakHo.y = this.player.y + 48
             this.attakHo.setAngle(180)
             setTimeout(() => {

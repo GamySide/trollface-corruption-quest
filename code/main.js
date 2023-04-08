@@ -12,6 +12,7 @@ var config = {
         }
     },
     scene: [Titlescene,MaisonPP,MaisonPiege,MaisonPNJ,Village,Forest,Etage1,Deathscreen],
+    pixelArt: true ,
     input: { gamepad: true },
 };
 var game = new Phaser.Game(config);
