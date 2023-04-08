@@ -34,10 +34,15 @@ class MaisonPP extends Phaser.Scene {
         this.load.image("ui3", "../assets/ui3.png");
         this.load.image("ui2", "../assets/ui2.png");
         this.load.image("ui1", "../assets/ui1.png");
+        
+        //this.load.image("Hitbox", "../assets/Hitbox.png");
     }
 
     create() {
-        console.log(this.hp)
+
+        this.invin = false;
+
+
         const cartemaisonPP = this.add.tilemap("maisonPP");
         const tileset = cartemaisonPP.addTilesetImage("placeholderMaison", "placeholderMaison");
 
@@ -78,15 +83,17 @@ class MaisonPP extends Phaser.Scene {
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
         this.player.setSize(32,32);
         this.player.setOffset(0,48);
+
+        //this.Hitbox = this.physics.add.sprite(this.posX + 100, this.posY + 10, 'Hitbox');
         
         const murdevant = cartemaisonPP.createLayer(
             "murdevant",
             tileset
         );
-        this.ui1 = this.add.image(135, 75, "ui1").setScrollFactor(0).setScale(1);
-        this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
-        this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
-        this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
+        //this.ui1 = this.add.image(135, 75, "ui1").setScrollFactor(0).setScale(1);
+        //this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
+        //this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
+        //this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
         this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
 
         props.setCollisionByExclusion(-1, true);
@@ -95,6 +102,7 @@ class MaisonPP extends Phaser.Scene {
         this.physics.add.collider(this.player, props);
         this.physics.add.collider(this.player, wall);
         this.physics.add.collider(this.player, sortie, porte);
+        this.physics.add.overlap(this.player, this.Hitbox, this.GetHit, null, null);
         function porte() {
             touchDoor = true
         }
@@ -181,6 +189,7 @@ class MaisonPP extends Phaser.Scene {
     }
 
     update() {
+        console.log(this.hp);
         this.input.gamepad.once('connected', function (mypad) {
             // 'pad' is a reference to the gamepad that was just connected
             this.pad = mypad;
@@ -365,5 +374,10 @@ class MaisonPP extends Phaser.Scene {
         if (this.hp == 2 || this.hp == 1) {
             this.ui.setTexture('ui1')
         }
+    }
+
+    GetHit(player, Hitbox){
+        console.log("Get damage");
+        damage = true;
     }
 }

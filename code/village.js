@@ -109,10 +109,10 @@ class Village extends Phaser.Scene {
         this.player.setSize(32,32);
         this.player.setOffset(0,48);
         
-        this.ui1 = this.add.image(135, 75, "ui1").setScrollFactor(0).setScale(1);
-        this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
-        this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
-        this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
+        //this.ui1 = this.add.image(135, 75, "ui1").setScrollFactor(0).setScale(1);
+        //this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
+        //this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
+        //this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
         this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
         
 
@@ -449,5 +449,10 @@ class Village extends Phaser.Scene {
         if (this.hp == 2 || this.hp == 1) {
             this.ui.setTexture('ui1')
         }
+        
+    }
+    GetHit(player, corruption_lake){
+        console.log("Get damage");
+        damage = true;
     }
 }
