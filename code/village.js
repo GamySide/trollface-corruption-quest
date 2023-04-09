@@ -113,7 +113,7 @@ class Village extends Phaser.Scene {
         //this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
         //this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
         //this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
-        this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
+        this.ui = this.add.image(90, 50, "uifull").setScrollFactor(0).setScale(0.75);
         
 
         this.player.setBounce(0);

@@ -76,8 +76,8 @@ class Etage1 extends Phaser.Scene {
         //this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
         //this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
         //this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
-        this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
-        this.Hitbox = this.physics.add.sprite(this.posX + 100, this.posY + 10, 'Hitbox');
+        this.ui = this.add.image(90, 50, "uifull").setScrollFactor(0).setScale(0.75);
+        //this.Hitbox = this.physics.add.sprite(this.posX + 100, this.posY + 10, 'Hitbox');
 
 
         mur.setCollisionByExclusion(-1, true);
@@ -200,7 +200,7 @@ class Etage1 extends Phaser.Scene {
         }
         this.physics.world.setBounds(-32 * 32, -32 * 32, 81 * 32, 49 * 32);
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(-32 * 32, -32 * 32, 81 * 32, 49 * 32);
+        //this.cameras.main.setBounds(-32 * 32, -32 * 32, 81 * 32, 49 * 32);
         this.cameras.main.startFollow(this.player);
     }
 

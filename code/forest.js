@@ -60,14 +60,15 @@ class Forest extends Phaser.Scene {
             "arbre",
             tileset
         );
-        const arbreDonjon = carteForest.createLayer(
-            "arbreDonjon",
-            giantTree
-        );
         const dungeonDoor = carteForest.createLayer(
             "dungeonDoor",
             giantTree
         );
+        const arbreDonjon = carteForest.createLayer(
+            "arbreDonjon",
+            giantTree
+        );
+        
         this.attakLat = this.physics.add.sprite(5000, 5000, 'atklat');
         this.attakHo = this.physics.add.sprite(5000, 5000, 'atkHo');
         this.player = this.physics.add.sprite(this.posX, this.posY, 'perso');
@@ -77,7 +78,7 @@ class Forest extends Phaser.Scene {
         //this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
         //this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
         //this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
-        this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
+        this.ui = this.add.image(90, 50, "uifull").setScrollFactor(0).setScale(0.75);
 
 
         arbre.setCollisionByExclusion(-1, true);

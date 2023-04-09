@@ -75,7 +75,7 @@ class MaisonPiege extends Phaser.Scene {
         //this.ui2 = this.add.image(135, 75, "ui2").setScrollFactor(0).setScale(1);
         //this.ui3 = this.add.image(135, 75, "ui3").setScrollFactor(0).setScale(1);
         //this.ui4 = this.add.image(135, 75, "ui4").setScrollFactor(0).setScale(1);
-        this.ui = this.add.image(135, 75, "uifull").setScrollFactor(0).setScale(1);
+        this.ui = this.add.image(90, 50, "uifull").setScrollFactor(0).setScale(0.75);
 
 
         props.setCollisionByExclusion(-1, true);
@@ -190,7 +190,7 @@ class MaisonPiege extends Phaser.Scene {
         }
         this.physics.world.setBounds(-1 * 32, -2 * 32, 20 * 32, 20 * 32);
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(-1 * 32, -3 * 32, 20 * 32, 20 * 32);
+        //this.cameras.main.setBounds(-1 * 32, -3 * 32, 20 * 32, 20 * 32);
         this.cameras.main.startFollow(this.player);
     }
 
