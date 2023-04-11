@@ -8,7 +8,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: false,
-            debug: true
+            debug: false
         }
     },
     scene: [Titlescene,MaisonPP,MaisonPiege,MaisonPNJ,Village,Forest,Etage1,Deathscreen],
